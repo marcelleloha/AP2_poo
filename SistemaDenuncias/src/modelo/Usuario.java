@@ -20,7 +20,12 @@ public class Usuario {
         this.idUsuario = ++id;
     }
 
-// TODO alterarSenha(novaSenha) - perguntar como fazer a verificação, se precisa de segurança rígida ou não
+    public void alterarSenha(String novaSenha) {
+        if (!novaSenha.equals(this.senha)) {
+            this.senha = novaSenha;
+            System.out.println("Senha alterada com sucesso.");
+        } else System.out.println("A nova senha não pode ser igual à antiga!");
+    }
 
     public boolean criarDenuncia(Categorias categoria, String desc, Localizacao local, Midia midia) {
         // verificar se já existe outra denúncia igual no sistema (mesma categoria e local) antes de criar. se já houver uma igual, retorna false
