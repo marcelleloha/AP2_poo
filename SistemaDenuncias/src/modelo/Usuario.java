@@ -1,23 +1,49 @@
 package modelo;
 
+import dao.DenunciaDAO;
+import java.sql.Connection;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Usuario {
-    private final int idUsuario;
+    private int idUsuario;
     private String nome;
     private String email;
     private String senha;
-    private boolean ehAdm;
-    private ArrayList<Denuncia> denuncias = new ArrayList<Denuncia>();
 
-    private static int id = 0;
-
-    public Usuario(String nome, String email, String senha, boolean ehAdm) {
+    // Novo usuário que não existia ainda
+    public Usuario(String nome, String email, String senha) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.ehAdm = ehAdm;
-        this.idUsuario = ++id;
+    }
+
+    // Usuário que veio do banco
+    public Usuario(int idUsuario, String nome, String email, String senha) {
+        this.idUsuario = idUsuario;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public void alterarSenha(String novaSenha) {
@@ -27,10 +53,19 @@ public class Usuario {
         } else System.out.println("A nova senha não pode ser igual à antiga!");
     }
 
-    public boolean criarDenuncia(Categorias categoria, String desc, Localizacao local, Midia midia) {
+    public boolean criarDenuncia(Connection connection, String titulo, Categoria categoria, String descricao, Localizacao localizacao, ArrayList<Midia> midias) {
         // verificar se já existe outra denúncia igual no sistema (mesma categoria e local) antes de criar. se já houver uma igual, retorna false
-
-        // Denuncia novaDenuncia = new Denuncia(categoria, desc, local, midia);
+        DenunciaDAO ddao = new DenunciaDAO(connection);
+        ArrayList<Object> denuncias = ddao.listarTodosLazyLoading();
+        Denuncia novaDenuncia = new Denuncia(this, titulo, categoria, descricao, localizacao, LocalDateTime.now(), midias);
+        for (Object o : denuncias) {
+            Denuncia d = (Denuncia) o;
+            if (novaDenuncia.equals(d)) {
+                return false;
+            }
+        }
+        ddao.salvar(novaDenuncia);
+        return true;
     }
 
     public boolean editarDenuncia(Denuncia denuncia, String dado, Object novoDado) {

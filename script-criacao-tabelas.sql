@@ -12,10 +12,11 @@ CREATE TABLE usuario (
 CREATE TABLE denuncia (
 	idDenuncia INT AUTO_INCREMENT PRIMARY KEY,
     idCriador INT,
+    titulo TEXT,
     categoria VARCHAR(50),
     descricao TEXT,
     dtDenuncia DATETIME,
-    FOREIGN KEY (idCriador) REFERENCES usuario (idUsuario)
+    FOREIGN KEY (idCriador) REFERENCES usuario (idUsuario) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE voto_prioridade (
@@ -23,16 +24,16 @@ CREATE TABLE voto_prioridade (
     idDenuncia INT,
     valor_voto INT,
     PRIMARY KEY (idUsuario, idDenuncia),
-    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario),
-    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia)
+    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE confirmacoes (
 	idUsuario INT,
     idDenuncia INT,
     PRIMARY KEY (idUsuario, idDenuncia),
-    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario),
-    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia)
+    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE comentario (
@@ -41,8 +42,8 @@ CREATE TABLE comentario (
     idDenuncia INT,
     texto TEXT,
     dtComentario DATETIME,
-    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario),
-    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia)
+    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE midia (
@@ -50,7 +51,7 @@ CREATE TABLE midia (
     idDenuncia INT,
     url TEXT,
     legenda TEXT,
-    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia)
+    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE endereco_fixo (
@@ -62,7 +63,7 @@ CREATE TABLE endereco_fixo (
     bairro TEXT,
     cidade TEXT,
     estado CHAR(2),
-    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia)
+    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE coordenadas (
@@ -72,7 +73,7 @@ CREATE TABLE coordenadas (
     longitude FLOAT,
     cidade TEXT,
     estado CHAR(2),
-    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia)
+    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE ponto_referencia (
@@ -82,5 +83,5 @@ CREATE TABLE ponto_referencia (
     descricaoPonto TEXT,
     cidade TEXT,
     estado CHAR(2),
-    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia)
+    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
 );
