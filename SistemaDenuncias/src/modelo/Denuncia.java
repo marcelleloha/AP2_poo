@@ -91,6 +91,11 @@ public class Denuncia implements Votavel {
         votosPrioridade.put(u, voto);
     }
 
+    @Override
+    public void removerVoto(Usuario u) {
+        votosPrioridade.remove(u);
+    }
+
     public void receberConfirmacao(Usuario u) {
         confirmacoes.add(u);
     }
@@ -106,5 +111,34 @@ public class Denuncia implements Votavel {
         if (o == null || getClass() != o.getClass()) return false;
         Denuncia denuncia = (Denuncia) o;
         return categoria == denuncia.categoria && Objects.equals(localizacao, denuncia.localizacao);
+    }
+
+    public void editarCategoria(Categoria novaCategoria) {
+        this.categoria = novaCategoria;
+    }
+
+    public void editarLocalizacao(Localizacao novaLocalizacao) {
+        this.localizacao = novaLocalizacao;
+    }
+
+    public void editarDescricao(String novaDesc) {
+        this.descricao = novaDesc;
+    }
+
+    public boolean receberComentario(Comentario)
+    public boolean removerComentario(Comentario)
+    public boolean adicionarMidia(Midia midia) {
+
+    }
+    public boolean removerMidia(Midia)
+
+    public float calcularMediaVotos() {
+        int quantidade = 0;
+        int soma = 0;
+        for (int voto : votosPrioridade.values()) {
+            soma += voto;
+            quantidade++;
+        }
+        return (float) soma /quantidade;
     }
 }

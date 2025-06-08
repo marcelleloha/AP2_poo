@@ -4,6 +4,7 @@ import dao.DenunciaDAO;
 import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Usuario {
     private int idUsuario;
@@ -56,11 +57,12 @@ public class Usuario {
     public boolean criarDenuncia(Connection connection, String titulo, Categoria categoria, String descricao, Localizacao localizacao, ArrayList<Midia> midias) {
         // verificar se já existe outra denúncia igual no sistema (mesma categoria e local) antes de criar. se já houver uma igual, retorna false
         DenunciaDAO ddao = new DenunciaDAO(connection);
-        ArrayList<Object> denuncias = ddao.listarTodosLazyLoading();
+        ArrayList<Object> denuncias = ddao.listarTodosEagerLoading();
         Denuncia novaDenuncia = new Denuncia(this, titulo, categoria, descricao, localizacao, LocalDateTime.now(), midias);
         for (Object o : denuncias) {
             Denuncia d = (Denuncia) o;
             if (novaDenuncia.equals(d)) {
+                System.out.println("Já existe uma denúncia com a mesma categoria e localização!");
                 return false;
             }
         }
@@ -88,21 +90,5 @@ public class Usuario {
 
     public boolean removerDenuncia(Denuncia d) {
         // caso o usuário seja um administrador, pode remover qualquer comentário, caso não, apenas os comentários deste usuário podem ser deletados
-    }
-
-    public boolean votar(int voto, Denuncia d) {
-        // adiciona um voto (valor inteiro entre 1 e 10) a uma denuncia, cada usuário só pode votar uma vez em cada denúncia
-    }
-
-    public boolean votar(int voto, Comentario c) {
-        // adiciona um voto (+1) a um comentário, cada usuário só pode votar uma vez em cada comentário
-    }
-
-    public boolean removerVoto(Denuncia d) {
-        // remove o voto deste usuário de uma denúncia
-    }
-
-    public boolean removerVoto(Comentario c) {
-        // remove o voto deste usuário de um comentário
     }
 }

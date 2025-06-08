@@ -4,9 +4,7 @@ import modelo.*;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class DenunciaDAO implements BaseDAO{
     private Connection connection;
@@ -31,7 +29,7 @@ public class DenunciaDAO implements BaseDAO{
 
                 pstm.setInt(1, denuncia.getCriador().getIdUsuario());
                 pstm.setString(2, denuncia.getTitulo());
-                pstm.setObject(3, denuncia.getCategoria());
+                pstm.setString(3, denuncia.getCategoria().name());
                 pstm.setString(4, denuncia.getDescricao());
                 pstm.setObject(5, denuncia.getData());
 
@@ -42,6 +40,10 @@ public class DenunciaDAO implements BaseDAO{
                         denuncia.setIdDenuncia(rst.getInt(1));
                     }
                 }
+
+                // Salvar os votos e denuncias separadamente, já que estão em tabelas separadas
+                salvarVotos(denuncia);
+                salvarConfirmacoes(denuncia);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -259,20 +261,23 @@ public class DenunciaDAO implements BaseDAO{
 
     @Override
     public void atualizar(Object objeto) {
-        if (!(objeto instanceof Usuario)) {
-            throw new IllegalArgumentException("Objeto deve ser do tipo Usuario.");
+        if (!(objeto instanceof Denuncia)) {
+            throw new IllegalArgumentException("Objeto deve ser do tipo Denuncia.");
         }
 
-        Usuario usuario = (Usuario) objeto;
+        Denuncia denuncia = (Denuncia) objeto;
 
-        String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ? WHERE idUsuario = ?";
+        // Atualizar os dados principais da denúncia
+        String sql = "UPDATE denuncia SET idCriador = ?, titulo = ?, categoria = ?, descricao = ?, dtDenuncia = ? WHERE idDenuncia = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
 
-            pstm.setString(1, usuario.getNome());
-            pstm.setString(2, usuario.getEmail());
-            pstm.setString(3, usuario.getSenha());
-            pstm.setInt(4, usuario.getIdUsuario());
+            pstm.setInt(1, denuncia.getCriador().getIdUsuario());
+            pstm.setString(2, denuncia.getTitulo());
+            pstm.setString(3, denuncia.getCategoria().name());
+            pstm.setString(4, denuncia.getDescricao());
+            pstm.setObject(5, denuncia.getData());
+            pstm.setInt(6, denuncia.getIdDenuncia());
 
             int linhasAfetadas = pstm.executeUpdate();
 
@@ -280,17 +285,24 @@ public class DenunciaDAO implements BaseDAO{
                 throw new SQLException("Falha ao atualizar: nenhuma linha foi afetada.");
             }
 
+            // Atualizar os votos e confirmações separadamente
+            // Primeiro excluir todos os votos e denúncias, depois inserir todos os novos e atualizados
+            excluirVotos(denuncia);
+            salvarVotos(denuncia);
+
+            excluirConfirmacoes(denuncia);
+            salvarConfirmacoes(denuncia);
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Erro ao atualizar usuario: " + e.getMessage());
+            throw new RuntimeException("Erro ao atualizar denuncia: " + e.getMessage());
         }
     }
 
     @Override
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM denuncia WHERE id = ?";
+            String sql = "DELETE FROM denuncia WHERE idDenuncia = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setInt(1, id);
@@ -301,6 +313,80 @@ public class DenunciaDAO implements BaseDAO{
                     throw new SQLException("Falha ao deletar: nenhuma linha foi afetada.");
                 }
 
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void excluirVotos(Denuncia denuncia) {
+        String sql;
+
+        try {
+            sql = "DELETE FROM voto_prioridade WHERE idDenuncia = ?";
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setInt(1, denuncia.getIdDenuncia());
+
+                int linhasAfetadas = pstm.executeUpdate();
+
+                if (linhasAfetadas == 0) {
+                    System.out.println("Aviso: a denúncia ainda não possui votos, ou ocorreu um erro, pois nenhuma linha foi afetada pela atualização.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void salvarVotos(Denuncia denuncia) {
+        String sql = "INSERT INTO voto_prioridade (idUsuario, idDenuncia, valor_voto) VALUES (?, ?, ?);";
+
+        try {
+            for (Map.Entry<Usuario, Integer> entry : denuncia.getVotosPrioridade().entrySet()) {
+                try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                    pstm.setInt(1, entry.getKey().getIdUsuario());
+                    pstm.setInt(2, denuncia.getIdDenuncia());
+                    pstm.setInt(3, entry.getValue());
+
+                    pstm.execute();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void excluirConfirmacoes(Denuncia denuncia) {
+        String sql = "DELETE FROM confirmacoes WHERE idDenuncia = ?";
+
+        try {
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setInt(1, denuncia.getIdDenuncia());
+
+                int linhasAfetadas = pstm.executeUpdate();
+
+                if (linhasAfetadas == 0) {
+                    System.out.println("Aviso: a denúncia ainda não possui confirmações, ou ocorreu um erro, pois nenhuma linha foi afetada pela atualização.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void salvarConfirmacoes(Denuncia denuncia) {
+        String sql = "INSERT INTO confirmacoes (idUsuario, idDenuncia) VALUES (?, ?);";
+
+        try {
+            for (Usuario u : denuncia.getConfirmacoes()) {
+                try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                    pstm.setInt(1, u.getIdUsuario());
+                    pstm.setInt(2, denuncia.getIdDenuncia());
+
+                    pstm.execute();
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
