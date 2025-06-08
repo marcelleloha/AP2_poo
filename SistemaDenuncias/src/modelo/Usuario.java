@@ -47,4 +47,9 @@ public class Usuario {
             System.out.println("Senha alterada com sucesso.");
         } else System.out.println("A nova senha não pode ser igual à antiga!");
     }
+
+    @Override
+    public String toString() {
+        return "idUsuario = " + idUsuario + ", nome = '" + nome + '\'' + ", email = '" + email + '\'';
+    }
 }

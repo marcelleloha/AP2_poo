@@ -2,11 +2,11 @@ package modelo;
 
 public abstract class Localizacao {
     private String cidade;
-    private String localizacao;
+    private String estado;
 
     public Localizacao(String cidade, String localizacao) {
         this.cidade = cidade;
-        this.localizacao = localizacao;
+        this.estado = localizacao;
     }
 
     public String getTipoLocalizacao(){
@@ -21,12 +21,12 @@ public abstract class Localizacao {
         this.cidade = cidade;
     }
 
-    public String getLocalizacao() {
-        return localizacao;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setLocalizacao(String localizacao) {
-        this.localizacao = localizacao;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public abstract String formatar();
