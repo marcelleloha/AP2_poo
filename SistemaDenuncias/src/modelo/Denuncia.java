@@ -18,15 +18,18 @@ public class Denuncia implements Votavel {
     private Set<Usuario> confirmacoes;
     private ArrayList<Midia> midias;
 
-    // Nova denuncia que não existia (ainda não tem votos, confirmações e comentários)
-    public Denuncia(Usuario criador, String titulo, Categoria categoria, String descricao, Localizacao localizacao, LocalDateTime data, ArrayList<Midia> midias) {
+    // Nova denuncia que não existia (ainda não tem votos e confirmações nem ID)
+    public Denuncia(Usuario criador, String titulo, Categoria categoria, String descricao, Localizacao localizacao, LocalDateTime data) {
         this.criador = criador;
         this.titulo = titulo;
         this.categoria = categoria;
         this.descricao = descricao;
         this.localizacao = localizacao;
         this.data = data;
-        this.midias = midias;
+
+        this.votosPrioridade = new HashMap<Usuario, Integer>();
+        this.confirmacoes = new HashSet<Usuario>();
+        this.midias = new ArrayList<Midia>();
     }
 
     // Denuncia do banco
@@ -100,6 +103,10 @@ public class Denuncia implements Votavel {
 
     public void receberConfirmacao(Usuario u) {
         confirmacoes.add(u);
+    }
+
+    public void removerConfirmacao(Usuario u) {
+        confirmacoes.remove(u);
     }
 
     public void addMidia(Midia midia) {

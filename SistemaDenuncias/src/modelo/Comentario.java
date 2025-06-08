@@ -1,6 +1,7 @@
 package modelo;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Comentario implements Votavel {
@@ -12,13 +13,14 @@ public class Comentario implements Votavel {
     private Set<Usuario> votos;
 
     // Comentário que veio do banco
-    public Comentario(int idComentario, Usuario autor, Denuncia denuncia, String conteudo, LocalDateTime data, Set<Usuario> votos) {
+    public Comentario(int idComentario, Usuario autor, Denuncia denuncia, String conteudo, LocalDateTime data) {
         this.idComentario = idComentario;
         this.autor = autor;
         this.denuncia = denuncia;
         this.conteudo = conteudo;
         this.data = data;
-        this.votos = votos;
+
+        this.votos = new HashSet<Usuario>();
     }
 
     // Comentário novo, sem ID e nem votos
@@ -27,6 +29,8 @@ public class Comentario implements Votavel {
         this.denuncia = denuncia;
         this.conteudo = conteudo;
         this.data = data;
+
+        this.votos = new HashSet<Usuario>();
     }
 
     public int getIdComentario() {
