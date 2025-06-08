@@ -1,5 +1,8 @@
 package modelo;
 
+import dao.DenunciaDAO;
+
+import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -14,21 +17,23 @@ public class Denuncia implements Votavel {
     private Map<Usuario, Integer> votosPrioridade;
     private Set<Usuario> confirmacoes;
     private ArrayList<Midia> midias;
-    // private Map<Usuario, Comentario> comentarios;
 
-    // Nova denuncia que não existia (ainda não tem votos, confirmações e comentários)
-    public Denuncia(Usuario criador, String titulo, Categoria categoria, String descricao, Localizacao localizacao, LocalDateTime data, ArrayList<Midia> midias) {
+    // Nova denuncia que não existia (ainda não tem votos e confirmações nem ID)
+    public Denuncia(Usuario criador, String titulo, Categoria categoria, String descricao, Localizacao localizacao, LocalDateTime data) {
         this.criador = criador;
         this.titulo = titulo;
         this.categoria = categoria;
         this.descricao = descricao;
         this.localizacao = localizacao;
         this.data = data;
-        this.midias = midias;
+
+        this.votosPrioridade = new HashMap<Usuario, Integer>();
+        this.confirmacoes = new HashSet<Usuario>();
+        this.midias = new ArrayList<Midia>();
     }
 
     // Denuncia do banco
-    public Denuncia(int idDenuncia, Usuario criador, String titulo, Categoria categoria, String descricao, Localizacao localizacao, LocalDateTime data) { //, Map<Usuario, Comentario> comentarios) {
+    public Denuncia(int idDenuncia, Usuario criador, String titulo, Categoria categoria, String descricao, Localizacao localizacao, LocalDateTime data) {
         this.idDenuncia = idDenuncia;
         this.criador = criador;
         this.titulo = titulo;
@@ -40,7 +45,6 @@ public class Denuncia implements Votavel {
         this.votosPrioridade = new HashMap<Usuario, Integer>();
         this.confirmacoes = new HashSet<Usuario>();
         this.midias = new ArrayList<Midia>();
-        //this.comentarios = comentarios;
     }
 
     public int getIdDenuncia() {
@@ -87,6 +91,7 @@ public class Denuncia implements Votavel {
         this.idDenuncia = idDenuncia;
     }
 
+    @Override
     public void receberVoto(Usuario u, Integer voto) {
         votosPrioridade.put(u, voto);
     }
@@ -100,10 +105,16 @@ public class Denuncia implements Votavel {
         confirmacoes.add(u);
     }
 
+    public void removerConfirmacao(Usuario u) {
+        confirmacoes.remove(u);
+    }
+
     public void addMidia(Midia midia) {
-        if (!midias.contains(midia)) {
-            midias.add(midia);
-        }
+        midias.add(midia);
+    }
+
+    public void removerMidia(Midia midia) {
+        midias.remove(midia);
     }
 
     @Override
@@ -125,13 +136,6 @@ public class Denuncia implements Votavel {
         this.descricao = novaDesc;
     }
 
-    public boolean receberComentario(Comentario)
-    public boolean removerComentario(Comentario)
-    public boolean adicionarMidia(Midia midia) {
-
-    }
-    public boolean removerMidia(Midia)
-
     public float calcularMediaVotos() {
         int quantidade = 0;
         int soma = 0;
@@ -140,5 +144,18 @@ public class Denuncia implements Votavel {
             quantidade++;
         }
         return (float) soma /quantidade;
+    }
+
+    public boolean persistirDenuncia(Denuncia denuncia, Connection connection) {
+        // verificar se já existe outra denúncia igual no sistema (mesma categoria e local) antes de criar. se já houver uma igual, retorna false
+        DenunciaDAO ddao = new DenunciaDAO(connection);
+        if (!ddao.existeDenunciaIgual(denuncia)) {
+            ddao.salvar(denuncia);
+            System.out.println("Denúncia salva no banco de dados com sucesso!");
+            return true;
+        } else {
+            System.out.println("Já existe uma denúncia com mesma categoria no mesmo local!");
+            return false;
+        }
     }
 }
