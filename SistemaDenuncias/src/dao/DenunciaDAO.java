@@ -118,7 +118,7 @@ public class DenunciaDAO implements BaseDAO{
 
     //Metodo ainda não está retornando os telefones da pessoa
     @Override
-    public Object buscarPorId(int id) {
+    public Denuncia buscarPorId(int id) {
         UsuarioDAO udao = new UsuarioDAO(connection);
 
         Denuncia denuncia = null;
