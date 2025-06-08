@@ -6,7 +6,8 @@ CREATE TABLE usuario (
 	idUsuario INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100),
     email VARCHAR(100),
-    senha TEXT
+    senha TEXT,
+    UNIQUE (nome, email)
 );
 
 CREATE TABLE denuncia (

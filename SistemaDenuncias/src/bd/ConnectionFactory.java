@@ -10,9 +10,9 @@ public class ConnectionFactory {
         try {
             String sgbd = "mysql";
             String endereco = "localhost";
-            String bd = "agenda";
+            String bd = "sistema_denuncias";
             String usuario = "root";
-            String senha = "mysqlroot";
+            String senha = "INSERIR SENHA DO BANCO DE DADOS";
 
             Connection connection = DriverManager.getConnection("jdbc:" + sgbd + "://" + endereco + "/" + bd, usuario, senha);
 

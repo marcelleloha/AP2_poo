@@ -146,16 +146,21 @@ public class Denuncia implements Votavel {
         return (float) soma /quantidade;
     }
 
-    public boolean persistirDenuncia(Denuncia denuncia, Connection connection) {
+    public boolean persistirDenuncia(Connection connection) {
         // verificar se já existe outra denúncia igual no sistema (mesma categoria e local) antes de criar. se já houver uma igual, retorna false
         DenunciaDAO ddao = new DenunciaDAO(connection);
-        if (!ddao.existeDenunciaIgual(denuncia)) {
-            ddao.salvar(denuncia);
+        if (!ddao.existeDenunciaIgual(this)) {
+            ddao.salvar(this);
             System.out.println("Denúncia salva no banco de dados com sucesso!");
             return true;
         } else {
             System.out.println("Já existe uma denúncia com mesma categoria no mesmo local!");
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ID da denúncia: "+ idDenuncia + ", Denúncia: " + titulo + ", criador: " + criador + ", data: " + data;
     }
 }

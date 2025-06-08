@@ -52,7 +52,7 @@ public class DenunciaDAO implements BaseDAO{
 
     public boolean existeDenunciaIgual (Denuncia denuncia) {
         String sql;
-        if (denuncia.getLocalizacao() instanceof EnderecoFixo) {
+        if (denuncia.getLocalizacao() instanceof EnderecoFixo localizacao) {
             sql = """
                     SELECT d.categoria, ef.cep, ef.numero, ef.bairro, ef.cidade, ef.estado
                     FROM denuncia as d
@@ -61,11 +61,11 @@ public class DenunciaDAO implements BaseDAO{
                     """;
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setString(1, denuncia.getCategoria().name());
-                pstm.setString(2, denuncia.getLocalizacao().getCep());
-                pstm.setString(3, denuncia.getLocalizacao().getNumero());
-                pstm.setString(4, denuncia.getLocalizacao().getBairro());
-                pstm.setString(5, denuncia.getLocalizacao().getCidade());
-                pstm.setString(6, denuncia.getLocalizacao().getEstado());
+                pstm.setString(2, localizacao.getCep());
+                pstm.setString(3, localizacao.getNumero());
+                pstm.setString(4, localizacao.getBairro());
+                pstm.setString(5, localizacao.getCidade());
+                pstm.setString(6, localizacao.getEstado());
 
                 try (ResultSet rst = pstm.executeQuery()) {
                     return rst.next(); // Retorna true se encontrou ao menos uma linha
@@ -73,7 +73,7 @@ public class DenunciaDAO implements BaseDAO{
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        } else if (denuncia.getLocalizacao() instanceof Coordenadas) {
+        } else if (denuncia.getLocalizacao() instanceof Coordenadas localizacao) {
             sql = """
                     SELECT d.idDenuncia, d.categoria, c.latitude, c.longitude, c.cidade, c.estado
                     FROM denuncia as d
@@ -82,10 +82,10 @@ public class DenunciaDAO implements BaseDAO{
                     """;
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setString(1, denuncia.getCategoria().name());
-                pstm.setString(2, denuncia.getLocalizacao().getLatitude());
-                pstm.setString(3, denuncia.getLocalizacao().getLongitude());
-                pstm.setString(4, denuncia.getLocalizacao().getCidade());
-                pstm.setString(5, denuncia.getLocalizacao().getEstado());
+                pstm.setDouble(2, localizacao.getLatitude());
+                pstm.setDouble(3, localizacao.getLongitude());
+                pstm.setString(4, localizacao.getCidade());
+                pstm.setString(5, localizacao.getEstado());
 
                 try (ResultSet rst = pstm.executeQuery()) {
                     return rst.next(); // Retorna true se encontrou ao menos uma linha
@@ -94,6 +94,7 @@ public class DenunciaDAO implements BaseDAO{
                 throw new RuntimeException(e);
             }
         } else {
+            PontoDeReferencia localizacao = (PontoDeReferencia) denuncia.getLocalizacao();
             sql = """
                     SELECT d.categoria, p.nomePonto, p.cidade, p.estado
                     FROM denuncia as d
@@ -102,9 +103,9 @@ public class DenunciaDAO implements BaseDAO{
                     """;
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setString(1, denuncia.getCategoria().name());
-                pstm.setString(2, denuncia.getLocalizacao().getNome());
-                pstm.setString(3, denuncia.getLocalizacao().getCidade());
-                pstm.setString(4, denuncia.getLocalizacao().getEstado());
+                pstm.setString(2, localizacao.getNome());
+                pstm.setString(3, localizacao.getCidade());
+                pstm.setString(4, localizacao.getEstado());
 
                 try (ResultSet rst = pstm.executeQuery()) {
                     return rst.next(); // Retorna true se encontrou ao menos uma linha
