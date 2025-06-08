@@ -3,9 +3,12 @@ import dao.DenunciaDAO;
 import dao.UsuarioDAO;
 import modelo.*;
 
+import javax.xml.transform.Source;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -52,5 +55,15 @@ public class Main {
 
         Denuncia denunciaId1 = ddao.buscarPorId(1);
         System.out.println(denunciaId1);
+        System.out.println("Votos da denúncia 1 ->");
+        for (Map.Entry<Usuario, Integer> entry : d1.getVotosPrioridade().entrySet()) {
+            System.out.println("Usuário: " + entry.getKey().getNome() + ", Voto: " + entry.getValue());
+        }
+        System.out.println("Média de votos da denúncia 1: " + d1.calcularMediaVotos());
+        System.out.println("Quantidade de confirmações da denúncia 1: " + d1.getConfirmacoes().size());
+        System.out.println("Usuários que confirmaram a denúncia 1 ->");
+        for (Usuario u : d1.getConfirmacoes()) {
+            System.out.println(u);
+        }
     }
 }
