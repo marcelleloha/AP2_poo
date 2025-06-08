@@ -1,6 +1,8 @@
 package dao;
 
+import modelo.Denuncia;
 import modelo.Midia;
+import modelo.Usuario;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,12 +23,12 @@ public class MidiaDAO implements BaseDAO {
         Midia midia = (Midia) objeto;
 
         try {
-            String sql = "INSERT INTO midia (url, legenda) VALUES (?, ?)";
+            String sql = "INSERT INTO midia (idDenuncia, url, legenda) VALUES (?, ?, ?)";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-                pstm.setObject(1, midia.getUrl());
-                pstm.setString(2, midia.getLegenda());
+                pstm.setObject(1, midia.getDenuncia().getIdDenuncia());
+                pstm.setObject(2, midia.getUrl());
+                pstm.setString(3, midia.getLegenda());
 
                 pstm.execute();
 
@@ -45,8 +47,9 @@ public class MidiaDAO implements BaseDAO {
 
     @Override
     public Object buscarPorId(int id) {
+        DenunciaDAO ddao = new DenunciaDAO(connection);
         try {
-            String sql = "SELECT idMidia, url, legenda FROM midia WHERE idMidia = ?";
+            String sql = "SELECT idMidia, idDenuncia, url, legenda FROM midia WHERE idMidia = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setInt(1, id);
@@ -54,10 +57,12 @@ public class MidiaDAO implements BaseDAO {
                 pstm.execute();
                 ResultSet rst = pstm.getResultSet();
                 while (rst.next()) {
-                    int identificador = rst.getInt("idMidia");
+                    int idMidia = rst.getInt("idMidia");
+                    int idDenuncia = rst.getInt("idDenuncia");
+                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
                     String url = rst.getString("url");
                     String legenda = rst.getString("legenda");
-                    return new Midia(identificador, url, legenda);
+                    return new Midia(idMidia, denuncia, url, legenda);
                 }
             }
             return null;
@@ -68,20 +73,23 @@ public class MidiaDAO implements BaseDAO {
 
     @Override
     public ArrayList<Object> listarTodosLazyLoading() {
+        DenunciaDAO ddao = new DenunciaDAO(connection);
 
         ArrayList<Object> midias = new ArrayList<>();
 
         try {
-            String sql = "SELECT idMidia, url, legenda FROM midia";
+            String sql = "SELECT idMidia, idDenuncia, url, legenda FROM midia";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.execute();
                 ResultSet rst = pstm.getResultSet();
                 while (rst.next()) {
-                    int identificador = rst.getInt("idMidia");
+                    int idMidia = rst.getInt("idMidia");
+                    int idDenuncia = rst.getInt("idDenuncia");
+                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
                     String url = rst.getString("url");
                     String legenda = rst.getString("legenda");
-                    Midia m = new Midia(identificador, url, legenda);
+                    Midia m = new Midia(idMidia, denuncia, url, legenda);
                     midias.add(m);
                 }
             }
@@ -97,35 +105,39 @@ public class MidiaDAO implements BaseDAO {
     }
 
     @Override
-    public ArrayList<Object> atualizar(Object objeto) {
+    public void atualizar(Object objeto) {
+        if (!(objeto instanceof Midia)) {
+            throw new IllegalArgumentException("Objeto deve ser do tipo Midia.");
+        }
 
-        ArrayList<Object> midias = new ArrayList<>();
+        Midia midia = (Midia) objeto;
 
-        try {
-            String sql = "SELECT idMidia, url, legenda FROM midia";
+        String sql = "UPDATE midia SET idDenuncia = ?, url = ?, legenda = ? WHERE idMidia = ?";
 
-            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
-                pstm.execute();
-                ResultSet rst = pstm.getResultSet();
-                while (rst.next()) {
-                    int identificador = rst.getInt("idMidia");
-                    String url = rst.getString("url");
-                    String legenda = rst.getString("legenda");
-                    String senha = rst.getString("senha");
-                    Midia m = new Midia(identificador, url, legenda);
-                    midias.add(m);
-                }
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+
+            pstm.setInt(1, midia.getDenuncia().getIdDenuncia());
+            pstm.setString(2, midia.getUrl());
+            pstm.setString(3, midia.getLegenda());
+            pstm.setInt(4, midia.getIdMidia());
+
+            int linhasAfetadas = pstm.executeUpdate();
+
+            if (linhasAfetadas == 0) {
+                throw new SQLException("Falha ao atualizar: nenhuma linha foi afetada.");
             }
-            return midias;
+
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao atualizar usuario: " + e.getMessage());
         }
     }
 
     @Override
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM midia WHERE id = ?";
+            String sql = "DELETE FROM midia WHERE idMidia = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setInt(1, id);

@@ -136,7 +136,7 @@ public class UsuarioDAO implements BaseDAO {
     @Override
     public void excluir(int id) {
         try {
-            String sql = "DELETE FROM usuario WHERE id = ?";
+            String sql = "DELETE FROM usuario WHERE idUsuario = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setInt(1, id);

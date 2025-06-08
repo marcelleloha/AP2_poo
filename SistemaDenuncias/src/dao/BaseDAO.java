@@ -7,6 +7,6 @@ public interface BaseDAO {
     public Object buscarPorId(int id);
     public ArrayList<Object> listarTodosLazyLoading();
     public ArrayList<Object> listarTodosEagerLoading();
-    public ArrayList<Object> atualizar(Object objeto);
+    public void atualizar(Object objeto);
     public void excluir(int id);
 }
