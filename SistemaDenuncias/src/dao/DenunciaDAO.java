@@ -41,12 +41,77 @@ public class DenunciaDAO implements BaseDAO{
                     }
                 }
 
-                // Salvar os votos e denuncias separadamente, já que estão em tabelas separadas
+                // Salvar os votos e confirmações separadamente, já que estão em tabelas separadas
                 salvarVotos(denuncia);
                 salvarConfirmacoes(denuncia);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public boolean existeDenunciaIgual (Denuncia denuncia) {
+        String sql;
+        if (denuncia.getLocalizacao() instanceof EnderecoFixo) {
+            sql = """
+                    SELECT d.categoria, ef.cep, ef.numero, ef.bairro, ef.cidade, ef.estado
+                    FROM denuncia as d
+                    JOIN endereco_fixo as ef on d.idDenuncia = ef.idDenuncia
+                    WHERE d.categoria = ? and ef.cep = ? and ef.numero = ? and ef.bairro = ? and ef.cidade = ? and ef.estado = ?;
+                    """;
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setString(1, denuncia.getCategoria().name());
+                pstm.setString(2, denuncia.getLocalizacao().getCep());
+                pstm.setString(3, denuncia.getLocalizacao().getNumero());
+                pstm.setString(4, denuncia.getLocalizacao().getBairro());
+                pstm.setString(5, denuncia.getLocalizacao().getCidade());
+                pstm.setString(6, denuncia.getLocalizacao().getEstado());
+
+                try (ResultSet rst = pstm.executeQuery()) {
+                    return rst.next(); // Retorna true se encontrou ao menos uma linha
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (denuncia.getLocalizacao() instanceof Coordenadas) {
+            sql = """
+                    SELECT d.idDenuncia, d.categoria, c.latitude, c.longitude, c.cidade, c.estado
+                    FROM denuncia as d
+                    JOIN coordenadas as c on d.idDenuncia = c.idDenuncia
+                    WHERE d.categoria = ? and ABS(c.latitude - ?) < 0.00005 and ABS(c.longitude - ?) < 0.00005 and c.cidade = ? and c.estado = ?;
+                    """;
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setString(1, denuncia.getCategoria().name());
+                pstm.setString(2, denuncia.getLocalizacao().getLatitude());
+                pstm.setString(3, denuncia.getLocalizacao().getLongitude());
+                pstm.setString(4, denuncia.getLocalizacao().getCidade());
+                pstm.setString(5, denuncia.getLocalizacao().getEstado());
+
+                try (ResultSet rst = pstm.executeQuery()) {
+                    return rst.next(); // Retorna true se encontrou ao menos uma linha
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            sql = """
+                    SELECT d.categoria, p.nomePonto, p.cidade, p.estado
+                    FROM denuncia as d
+                    JOIN ponto_referencia as p on p.idDenuncia = d.idDenuncia
+                    WHERE d.categoria = ? and p.nomePonto = ? and p.cidade = ? and p.estado = ?;
+                    """;
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setString(1, denuncia.getCategoria().name());
+                pstm.setString(2, denuncia.getLocalizacao().getNome());
+                pstm.setString(3, denuncia.getLocalizacao().getCidade());
+                pstm.setString(4, denuncia.getLocalizacao().getEstado());
+
+                try (ResultSet rst = pstm.executeQuery()) {
+                    return rst.next(); // Retorna true se encontrou ao menos uma linha
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

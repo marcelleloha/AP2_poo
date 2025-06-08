@@ -19,6 +19,16 @@ CREATE TABLE denuncia (
     FOREIGN KEY (idCriador) REFERENCES usuario (idUsuario) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE comentario (
+	idComentario INT PRIMARY KEY AUTO_INCREMENT,
+    idUsuario INT,
+    idDenuncia INT,
+    texto TEXT,
+    dtComentario DATETIME,
+    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE voto_prioridade (
 	idUsuario INT,
     idDenuncia INT,
@@ -28,20 +38,18 @@ CREATE TABLE voto_prioridade (
     FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE voto_comentario (
+    idUsuario INT,
+    idComentario INT,
+    PRIMARY KEY (idUsuario, idComentario),
+    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idComentario) REFERENCES comentario(idComentario) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE confirmacoes (
 	idUsuario INT,
     idDenuncia INT,
     PRIMARY KEY (idUsuario, idDenuncia),
-    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE comentario (
-	idComentario INT PRIMARY KEY AUTO_INCREMENT,
-    idUsuario INT,
-    idDenuncia INT,
-    texto TEXT,
-    dtComentario DATETIME,
     FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (idDenuncia) REFERENCES denuncia(idDenuncia) ON DELETE CASCADE ON UPDATE CASCADE
 );
