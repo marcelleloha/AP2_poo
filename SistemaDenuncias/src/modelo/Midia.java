@@ -9,6 +9,12 @@ public class Midia {
         this.legenda = legenda;
     }
 
+    // Midia do Banco
+    public Midia(int identificador, String url, String legenda) {
+        this.url = url;
+        this.legenda = legenda;
+    }
+
     public String getLegenda() {
         return legenda;
     }
@@ -23,5 +29,8 @@ public class Midia {
 
     public void setLegenda(String legenda) {
         this.legenda = legenda;
+    }
+
+    public void setIdMidia(int idMidia) {
     }
 }
