@@ -22,6 +22,8 @@ public class Main {
 
         // Iniciando testes
         Localizacao local = new PontoDeReferencia("Rio de janeiro", "RJ", "Pedra grande no fim da esquina", "lá");
+        EnderecoFixo local2 = new EnderecoFixo("Santo André", "SP", "22790-555", "Av. Selector", "13.500", "Pedra");
+        local2.persistirEndereco(connection);
 
         Usuario u1 = new Usuario("Eduardo Peruzzo", "eduardo@email.com", "jorge");
         Denuncia d1 = new Denuncia(u1, "Buraco enorme na frente da minha casa", Categoria.BURACO_NA_RUA, "Não consigo sair com o carro por causa desse buracão", local, LocalDateTime.now());
