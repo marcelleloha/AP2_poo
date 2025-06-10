@@ -14,6 +14,16 @@ public class EnderecoFixo extends Localizacao {
         this.bairro = bairro;
     }
 
+    // construtor do banco
+    public EnderecoFixo(int idEndereco, Denuncia denuncia, String cidade, String estado, String cep, String rua, String numero, String bairro) {
+        super(denuncia, cidade, estado);
+        this.cep = cep;
+        this.rua = rua;
+        this.numero = numero;
+        this.bairro = bairro;
+    }
+
+
     public String getCep() {
         return cep;
     }
@@ -33,5 +43,8 @@ public class EnderecoFixo extends Localizacao {
     @Override
     public String formatar() {
         return "Cep: " + this.cep + ", Rua: " + this.rua + ", Numero: " + this.numero + ", Bairro: " + this.bairro;
+    }
+
+    public void setIdEndereco(int IdEndereco) {
     }
 }
