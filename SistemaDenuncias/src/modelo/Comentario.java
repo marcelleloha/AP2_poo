@@ -1,6 +1,6 @@
 package modelo;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,11 +9,11 @@ public class Comentario implements Votavel {
     private Usuario autor;
     private Denuncia denuncia;
     private String conteudo;
-    private LocalDateTime data;
+    private Date data;
     private Set<Usuario> votos;
 
     // Comentário que veio do banco
-    public Comentario(int idComentario, Usuario autor, Denuncia denuncia, String conteudo, LocalDateTime data) {
+    public Comentario(int idComentario, Usuario autor, Denuncia denuncia, String conteudo, Date data) {
         this.idComentario = idComentario;
         this.autor = autor;
         this.denuncia = denuncia;
@@ -24,7 +24,7 @@ public class Comentario implements Votavel {
     }
 
     // Comentário novo, sem ID e nem votos
-    public Comentario(Usuario autor, Denuncia denuncia, String conteudo, LocalDateTime data) {
+    public Comentario(Usuario autor, Denuncia denuncia, String conteudo, Date data) {
         this.autor = autor;
         this.denuncia = denuncia;
         this.conteudo = conteudo;
@@ -49,7 +49,7 @@ public class Comentario implements Votavel {
         return conteudo;
     }
 
-    public LocalDateTime getData() {
+    public Date getData() {
         return data;
     }
 

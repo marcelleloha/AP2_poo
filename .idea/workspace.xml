@@ -5,14 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c480f901-a18e-4420-baea-2bb3df9697f4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SistemaDenuncias/src/dao/ComentarioDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/dao/EnderecoFixoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/dao/EnderecoFixoDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/EnderecoFixo.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/EnderecoFixo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Comentario.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Comentario.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
@@ -28,12 +36,12 @@
     &quot;assignee&quot;: &quot;marcelleloha&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/marcelleloha/AP2_poo.git",
-    "accountId": "5e176b60-0dc6-48c7-a306-0b90015b38bd"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/marcelleloha/AP2_poo.git&quot;,
+    &quot;accountId&quot;: &quot;5e176b60-0dc6-48c7-a306-0b90015b38bd&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>

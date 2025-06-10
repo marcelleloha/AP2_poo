@@ -15,8 +15,8 @@ public class EnderecoFixoDAO {
 
     public void salvar(Object objeto){
 
-        if (!(objeto instanceof Usuario)) {
-            throw new IllegalArgumentException("Objeto deve ser do tipo Usuario.");
+        if (!(objeto instanceof EnderecoFixo)) {
+            throw new IllegalArgumentException("Objeto deve ser do tipo Endereco.");
         }
 
         EnderecoFixo endereco = (EnderecoFixo) objeto;
