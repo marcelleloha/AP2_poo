@@ -1,12 +1,14 @@
 package modelo;
 
 public abstract class Localizacao {
-    private String cidade;
-    private String estado;
+    protected Denuncia denuncia;
+    protected String cidade;
+    protected String estado;
 
-    public Localizacao(String cidade, String localizacao) {
+    public Localizacao(Denuncia denuncia, String cidade, String estado) {
+        this.denuncia = denuncia;
         this.cidade = cidade;
-        this.estado = localizacao;
+        this.estado = estado;
     }
 
     public String getTipoLocalizacao(){
@@ -30,4 +32,8 @@ public abstract class Localizacao {
     }
 
     public abstract String formatar();
+
+    public Denuncia getDenuncia() {
+        return denuncia;
+    }
 }

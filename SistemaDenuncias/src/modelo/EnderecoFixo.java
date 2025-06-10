@@ -6,8 +6,8 @@ public class EnderecoFixo extends Localizacao {
     private String numero;
     private String bairro;
 
-    public EnderecoFixo(String cidade, String estado, String cep, String rua, String numero, String bairro) {
-        super(cidade, estado);
+    public EnderecoFixo(Denuncia denuncia, String cidade, String estado, String cep, String rua, String numero, String bairro) {
+        super(denuncia, cidade, estado);
         this.cep = cep;
         this.rua = rua;
         this.numero = numero;
