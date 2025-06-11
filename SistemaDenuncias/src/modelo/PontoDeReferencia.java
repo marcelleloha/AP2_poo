@@ -34,7 +34,7 @@ public class PontoDeReferencia extends Localizacao {
 
     @Override
     public String formatar() {
-        return "Nome: " + this.nomeponto + ", Descrição: " + this.descricaoponto;
+        return "Cidade: " + this.cidade + "Estado: " + this.estado + "Nome: " + this.nomeponto + ", Descrição: " + this.descricaoponto;
     }
 
     public void setIdPonto(int idPonto) {

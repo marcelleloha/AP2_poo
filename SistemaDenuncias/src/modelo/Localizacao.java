@@ -36,6 +36,7 @@ public abstract class Localizacao {
         this.estado = estado;
     }
 
+    // exibe informaçoes de localizacao das classes herdeiras
     public abstract String formatar();
 
     public Denuncia getDenuncia() {

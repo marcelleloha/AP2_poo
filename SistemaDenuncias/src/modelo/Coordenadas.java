@@ -32,9 +32,10 @@ public class Coordenadas extends Localizacao {
         return idCoordenada;
     }
 
+
     @Override
     public String formatar() {
-        return "Longitude: " + this.longitude + ", Latitude: " + this.latitude;
+        return "Cidade: " + this.cidade + "Estado: " + this.estado + "Longitude: " + this.longitude + ", Latitude: " + this.latitude;
     }
 
     public void setIdCoordenada(int idCoordenada) {

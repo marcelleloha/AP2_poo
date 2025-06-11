@@ -142,6 +142,7 @@ public class Denuncia implements Votavel {
         this.descricao = novaDesc;
     }
 
+    // calcula a media votos para definir a prioridade
     public float calcularMediaVotos() {
         int quantidade = 0;
         int soma = 0;

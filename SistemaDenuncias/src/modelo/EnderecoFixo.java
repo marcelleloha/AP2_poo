@@ -47,9 +47,10 @@ public class EnderecoFixo extends Localizacao {
         return idEndereco;
     }
 
+
     @Override
     public String formatar() {
-        return "Cep: " + this.cep + ", Rua: " + this.rua + ", Numero: " + this.numero + ", Bairro: " + this.bairro;
+        return "Cidade: " + this.cidade + "Estado: " + this.estado + this.cep + ", Rua: " + this.rua + ", Numero: " + this.numero + ", Bairro: " + this.bairro;
     }
 
     public void setIdEndereco(int idEndereco) {
