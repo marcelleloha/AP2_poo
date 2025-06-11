@@ -1,11 +1,163 @@
 package dao;
 
-import java.sql.Connection;
+import modelo.Denuncia;
+import modelo.PontoDeReferencia;
 
-public class PontoDeReferenciaDAO {
+import java.sql.*;
+import java.util.ArrayList;
+
+public class PontoDeReferenciaDAO implements BaseDAO {
     private Connection connection;
 
     public PontoDeReferenciaDAO(Connection connection) {
         this.connection = connection;
     }
+
+
+    @Override
+    public void salvar(Object objeto) {
+        if (!(objeto instanceof PontoDeReferencia)) {
+            throw new IllegalArgumentException("Objeto deve ser do tipo Ponto de Referencia.");
+        }
+
+        PontoDeReferencia pontoDeReferencia = (PontoDeReferencia) objeto;
+
+        try {
+            String sql = "INSERT INTO ponto_referencia (idDenuncia, nomeponto, descricaoponto) VALUES (?, ?, ?)";
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                pstm.setObject(1, pontoDeReferencia.getDenuncia().getIdDenuncia());
+                pstm.setString(2, pontoDeReferencia.getNome());
+                pstm.setString(3, pontoDeReferencia.getDescricao());
+
+                pstm.execute();
+
+                try (ResultSet rst = pstm.getGeneratedKeys()) {
+                    while (rst.next()) {
+                        pontoDeReferencia.setIdPonto(rst.getInt(1));
+                    }
+
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Object buscarPorId(int id) {
+        DenunciaDAO ddao = new DenunciaDAO(connection);
+        try {
+            String sql = "SELECT idPonto, idDenuncia, cidade, estado, nomeponto, descricaoponto FROM ponto_referencia WHERE idPonto = ?";
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setInt(1, id);
+
+                pstm.execute();
+                ResultSet rst = pstm.getResultSet();
+                while (rst.next()) {
+                    int idPonto = rst.getInt("idPonto");
+                    int idDenuncia = rst.getInt("idDenuncia");
+                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
+                    String cidade = rst.getString("cidade");
+                    String estado = rst.getString("estado");
+                    String nomeponto = rst.getString("nomeponto");
+                    String descricaoponto = rst.getString("descricaoponto");
+                    return new PontoDeReferencia(idPonto, denuncia, cidade, estado, nomeponto, descricaoponto);
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ArrayList<Object> listarTodosLazyLoading() {
+        DenunciaDAO ddao = new DenunciaDAO(connection);
+
+        ArrayList<Object> coordenadas = new ArrayList<>();
+
+        try {
+            String sql = "idPonto, idDenuncia, cidade, estado, nomeponto, descricaoponto FROM ponto_referencia";
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.execute();
+                ResultSet rst = pstm.getResultSet();
+                while (rst.next()) {
+                    int idPonto = rst.getInt("idPonto");
+                    int idDenuncia = rst.getInt("idDenuncia");
+                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
+                    String cidade = rst.getString("cidade");
+                    String estado = rst.getString("estado");
+                    String nomeponto = rst.getString("nomeponto");
+                    String descricaoponto = rst.getString("descricaoponto");
+
+                    PontoDeReferencia p = new PontoDeReferencia(idPonto, denuncia, cidade, estado, nomeponto, descricaoponto);
+                    coordenadas.add(p);
+                }
+            }
+            return coordenadas;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ArrayList<Object> listarTodosEagerLoading() {
+        return listarTodosLazyLoading();
+    }
+
+    @Override
+    public void atualizar(Object objeto) {
+        if (!(objeto instanceof PontoDeReferencia)) {
+            throw new IllegalArgumentException("Objeto deve ser do tipo Ponto de Referencia.");
+        }
+
+        PontoDeReferencia pontoDeReferencia = (PontoDeReferencia) objeto;
+
+        String sql = "UPDATE ponto_referencia SET idDenuncia = ?, cidade = ?, estado = ?, nomeponto = ?, descricaoponto = ? WHERE idCoordenada = ?";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+
+            pstm.setInt(1, pontoDeReferencia.getDenuncia().getIdDenuncia());
+            pstm.setString(2, pontoDeReferencia.getCidade());
+            pstm.setString(3, pontoDeReferencia.getEstado());
+            pstm.setString(4, pontoDeReferencia.getNome());
+                pstm.setString(5, pontoDeReferencia.getDescricao());
+
+            int linhasAfetadas = pstm.executeUpdate();
+
+            if (linhasAfetadas == 0) {
+                throw new SQLException("Falha ao atualizar: nenhuma linha foi afetada.");
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao atualizar Ponto de Referencia: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void excluir(int id) {
+        try {
+            String sql = "DELETE FROM ponto_referencia WHERE idPonto = ?";
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setInt(1, id);
+
+                int linhasAfetadas = pstm.executeUpdate();
+
+                if (linhasAfetadas == 0) {
+                    throw new SQLException("Falha ao deletar: nenhuma linha foi afetada.");
+                }
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+

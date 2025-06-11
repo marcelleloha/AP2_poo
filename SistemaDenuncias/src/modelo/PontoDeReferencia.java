@@ -1,25 +1,35 @@
 package modelo;
 
 public class PontoDeReferencia extends Localizacao {
-    private String nome;
-    private String descricao;
+    private String nomeponto;
+    private String descricaoponto;
 
-    public PontoDeReferencia(Denuncia denuncia, String cidade, String estado, String nome, String descricao) {
+    public PontoDeReferencia(Denuncia denuncia, String cidade, String estado, String nomeponto, String descricaoponto) {
         super(denuncia, cidade, estado);
-        this.nome = nome;
-        this.descricao = descricao;
+        this.nomeponto = nomeponto;
+        this.descricaoponto = descricaoponto;
+    }
+
+    //construtor do banco
+    public PontoDeReferencia(int idPonto, Denuncia denuncia, String cidade, String estado, String nomeponto, String descricaoponto) {
+        super(denuncia, cidade, estado);
+        this.nomeponto = nomeponto;
+        this.descricaoponto = descricaoponto;
     }
 
     public String getNome() {
-        return nome;
+        return nomeponto;
     }
 
     public String getDescricao() {
-        return descricao;
+        return descricaoponto;
     }
 
     @Override
     public String formatar() {
-        return "Nome: " + this.nome + ", Descrição: " + this.descricao;
+        return "Nome: " + this.nomeponto + ", Descrição: " + this.descricaoponto;
+    }
+
+    public void setIdPonto(int idPonto) {
     }
 }

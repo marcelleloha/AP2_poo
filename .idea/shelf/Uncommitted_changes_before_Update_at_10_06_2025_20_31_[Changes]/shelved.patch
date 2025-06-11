@@ -1,0 +1,637 @@
+Index: SistemaDenuncias/src/dao/EnderecoFixoDAO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package dao;\r\n\r\nimport modelo.Denuncia;\r\nimport modelo.EnderecoFixo;\r\nimport modelo.Midia;\r\nimport modelo.Usuario;\r\n\r\nimport java.sql.*;\r\nimport java.util.ArrayList;\r\n\r\npublic class EnderecoFixoDAO implements BaseDAO {\r\n    private Connection connection;\r\n\r\n    public EnderecoFixoDAO(Connection connection) {\r\n        this.connection = connection;\r\n    }\r\n\r\n    @Override\r\n    public void salvar(Object objeto) {\r\n        if (!(objeto instanceof EnderecoFixo)) {\r\n            throw new IllegalArgumentException(\"Objeto deve ser do tipo Endereço Fixo.\");\r\n        }\r\n\r\n        EnderecoFixo enderecoFixo = (EnderecoFixo) objeto;\r\n\r\n        try {\r\n            String sql = \"INSERT INTO endereco_fixo (idDenuncia, cep, rua, numero, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?)\";\r\n\r\n            try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {\r\n                pstm.setObject(1, enderecoFixo.getDenuncia().getIdDenuncia());\r\n                pstm.setString(2, enderecoFixo.getCep());\r\n                pstm.setString(3, enderecoFixo.getRua());\r\n                pstm.setString(4, enderecoFixo.getNumero());\r\n                pstm.setString(5, enderecoFixo.getBairro());\r\n                pstm.setString(6, enderecoFixo.getCidade());\r\n                pstm.setString(7, enderecoFixo.getEstado());\r\n\r\n                pstm.execute();\r\n                try (ResultSet rst = pstm.getGeneratedKeys()) {\r\n                    while (rst.next()) {\r\n                        enderecoFixo.setIdEndereco(rst.getInt(1));\r\n                    }\r\n                }\r\n            }\r\n\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n\r\n    }\r\n\r\n    @Override\r\n    public Object buscarPorId(int id) {\r\n        DenunciaDAO ddao = new DenunciaDAO(connection);\r\n        try {\r\n            String sql = \"SELECT idEndereco, idDenuncia, cidade, estado, cep, rua, numero, bairro FROM endereco_fixo WHERE idEndereco = ?\";\r\n\r\n            try (PreparedStatement pstm = connection.prepareStatement(sql)) {\r\n                pstm.setInt(1, id);\r\n\r\n                pstm.execute();\r\n                ResultSet rst = pstm.getResultSet();\r\n                while (rst.next()) {\r\n                    int idEndereco = rst.getInt(\"idEndereco\");\r\n                    int idDenuncia = rst.getInt(\"idDenuncia\");\r\n                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);\r\n                    String cidade = rst.getString(\"cidade\");\r\n                    String estado = rst.getString(\"estado\");\r\n                    String cep = rst.getString(\"cep\");\r\n                    String rua = rst.getString(\"rua\");\r\n                    String numero = rst.getString(\"numero\");\r\n                    String bairro = rst.getString(\"bairro\");\r\n\r\n\r\n                    return new EnderecoFixo(idEndereco, denuncia, cidade, estado, cep, rua, numero, bairro);\r\n                }\r\n            }\r\n            return null;\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public ArrayList<Object> listarTodosLazyLoading() {\r\n        DenunciaDAO ddao = new DenunciaDAO(connection);\r\n\r\n        ArrayList<Object> enderecos = new ArrayList<>();\r\n\r\n        try {\r\n            String sql = \"SELECT idEndereco, idDenuncia, cidade, estado, cep, rua, numero, bairro FROM endereco_fixo\";\r\n\r\n            try (PreparedStatement pstm = connection.prepareStatement(sql)) {\r\n                pstm.execute();\r\n                ResultSet rst = pstm.getResultSet();\r\n                while (rst.next()) {\r\n                    int idEndereco = rst.getInt(\"idEndereco\");\r\n                    int idDenuncia = rst.getInt(\"idDenuncia\");\r\n                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);\r\n                    String cidade = rst.getString(\"cidade\");\r\n                    String estado = rst.getString(\"estado\");\r\n                    String cep = rst.getString(\"cep\");\r\n                    String rua = rst.getString(\"rua\");\r\n                    String numero = rst.getString(\"numero\");\r\n                    String bairro = rst.getString(\"bairro\");\r\n                    EnderecoFixo e = new EnderecoFixo(idEndereco, denuncia, cidade, estado, cep, rua, numero, bairro);\r\n                    enderecos.add(e);\r\n                }\r\n            }\r\n            return enderecos;\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public ArrayList<Object> listarTodosEagerLoading() {\r\n        return listarTodosLazyLoading();\r\n    }\r\n\r\n    @Override\r\n    public void atualizar(Object objeto) {\r\n        if (!(objeto instanceof EnderecoFixo)) {\r\n            throw new IllegalArgumentException(\"Objeto deve ser do tipo Midia.\");\r\n        }\r\n\r\n        EnderecoFixo enderecoFixo = (EnderecoFixo) objeto;\r\n\r\n        String sql = \"UPDATE endereco_fixo SET idDenuncia = ?, cidade = ?, estado = ?, cep = ?, rua = ?, numero = ?, bairro = ? WHERE idMidia = ?\";\r\n\r\n        try (PreparedStatement pstm = connection.prepareStatement(sql)) {\r\n\r\n            pstm.setInt(1, enderecoFixo.getDenuncia().getIdDenuncia());\r\n            pstm.setString(2, enderecoFixo.getCidade());\r\n            pstm.setString(3, enderecoFixo.getEstado());\r\n            pstm.setString(5, enderecoFixo.getCep());\r\n            pstm.setString(6, enderecoFixo.getRua());\r\n            pstm.setString(7, enderecoFixo.getNumero());\r\n            pstm.setString(3, enderecoFixo.getBairro());\r\n\r\n            int linhasAfetadas = pstm.executeUpdate();\r\n\r\n            if (linhasAfetadas == 0) {\r\n                throw new SQLException(\"Falha ao atualizar: nenhuma linha foi afetada.\");\r\n            }\r\n\r\n\r\n        } catch (SQLException e) {\r\n            e.printStackTrace();\r\n            throw new RuntimeException(\"Erro ao atualizar endereco: \" + e.getMessage());\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void excluir(int id) {\r\n        try {\r\n            String sql = \"DELETE FROM endereco_fixo WHERE idEndereco = ?\";\r\n\r\n            try (PreparedStatement pstm = connection.prepareStatement(sql)) {\r\n                pstm.setInt(1, id);\r\n\r\n                int linhasAfetadas = pstm.executeUpdate();\r\n\r\n                if (linhasAfetadas == 0) {\r\n                    throw new SQLException(\"Falha ao deletar: nenhuma linha foi afetada.\");\r\n                }\r\n\r\n            }\r\n        } catch (SQLException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    }\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/SistemaDenuncias/src/dao/EnderecoFixoDAO.java b/SistemaDenuncias/src/dao/EnderecoFixoDAO.java
+--- a/SistemaDenuncias/src/dao/EnderecoFixoDAO.java	(revision 3299be7c763f45515bc1121cfa0fc8ee2aefe0e6)
++++ b/SistemaDenuncias/src/dao/EnderecoFixoDAO.java	(date 1749598219359)
+@@ -1,110 +1,130 @@
+ package dao;
+ 
+-import modelo.Denuncia;
+-import modelo.EnderecoFixo;
+-import modelo.Midia;
+-import modelo.Usuario;
++import modelo.*;
+ 
+ import java.sql.*;
++import java.time.LocalDateTime;
+ import java.util.ArrayList;
+ 
+-public class EnderecoFixoDAO implements BaseDAO {
++public class EnderecoFixoDAO {
+     private Connection connection;
+ 
+     public EnderecoFixoDAO(Connection connection) {
+         this.connection = connection;
+     }
+ 
+-    @Override
+-    public void salvar(Object objeto) {
++    public void salvar(Object objeto){
++
+         if (!(objeto instanceof EnderecoFixo)) {
+-            throw new IllegalArgumentException("Objeto deve ser do tipo Endereço Fixo.");
++            throw new IllegalArgumentException("Objeto deve ser do tipo Endereco.");
+         }
+ 
+-        EnderecoFixo enderecoFixo = (EnderecoFixo) objeto;
++        EnderecoFixo endereco = (EnderecoFixo) objeto;
+ 
+-        try {
+-            String sql = "INSERT INTO endereco_fixo (idDenuncia, cep, rua, numero, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
++        try{
++            String sql = "INSERT INTO endereco_fixo (cidade, estado, cep, rua, numero, bairro) VALUES(?,?,?,?,?,?)";
+ 
+-            try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+-                pstm.setObject(1, enderecoFixo.getDenuncia().getIdDenuncia());
+-                pstm.setString(2, enderecoFixo.getCep());
+-                pstm.setString(3, enderecoFixo.getRua());
+-                pstm.setString(4, enderecoFixo.getNumero());
+-                pstm.setString(5, enderecoFixo.getBairro());
+-                pstm.setString(6, enderecoFixo.getCidade());
+-                pstm.setString(7, enderecoFixo.getEstado());
++            try(PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
++
++                pstm.setString(1, endereco.getCidade()); //Define o primeiro ?
++                pstm.setString(2, endereco.getEstado()); //Define o segundo ?
++                pstm.setString(3, endereco.getCep()); //Define o terceiro ?
++                pstm.setString(4, endereco.getRua());
++                pstm.setString(5, endereco.getNumero());
++                pstm.setString(6, endereco.getBairro());
+ 
+                 pstm.execute();
++
+                 try (ResultSet rst = pstm.getGeneratedKeys()) {
+                     while (rst.next()) {
+-                        enderecoFixo.setIdEndereco(rst.getInt(1));
++                        endereco.setIdEndereco(rst.getInt(1));
+                     }
+                 }
+             }
+-
+         } catch (SQLException e) {
+             throw new RuntimeException(e);
+         }
+-
+     }
+ 
+-    @Override
+-    public Object buscarPorId(int id) {
+-        DenunciaDAO ddao = new DenunciaDAO(connection);
++    public boolean existeEnderecoIgual(EnderecoFixo endereco){
++        try{
++            String sql ="""
++                        SELECT *
++                        FROM endereco_fixo as ef
++                        WHERE ef.cep = ? and ef.numero = ? and ef.bairro = ? and ef.cidade = ? and ef.estado = ? and rua = ?
++                        """;
++            try(PreparedStatement pstm = connection.prepareStatement(sql)){
++                pstm.setString(1, endereco.getCep());
++                pstm.setString(2, endereco.getNumero());
++                pstm.setString(3, endereco.getBairro());
++                pstm.setString(4, endereco.getCidade());
++                pstm.setString(5, endereco.getEstado());
++                pstm.setString(6, endereco.getRua());
++
++                try (ResultSet rst = pstm.executeQuery()) {
++                    return rst.next(); // Retorna true se encontrou ao menos uma linha
++                }
++            }
++        } catch (SQLException e) {
++            throw new RuntimeException(e);
++        }
++    }
++
++    public EnderecoFixo buscarPorId(int id){
++        EnderecoFixo endereco = null;
++
+         try {
+-            String sql = "SELECT idEndereco, idDenuncia, cidade, estado, cep, rua, numero, bairro FROM endereco_fixo WHERE idEndereco = ?";
+-
++
++            String sql ="""
++                        SELECT cidade, estado, cep, rua, numero, bairro
++                        FROM endereco_fixo
++                        WHERE idEndereco = ?
++                        """;
+             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                 pstm.setInt(1, id);
+-
+                 pstm.execute();
+-                ResultSet rst = pstm.getResultSet();
+-                while (rst.next()) {
+-                    int idEndereco = rst.getInt("idEndereco");
+-                    int idDenuncia = rst.getInt("idDenuncia");
+-                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
+-                    String cidade = rst.getString("cidade");
+-                    String estado = rst.getString("estado");
+-                    String cep = rst.getString("cep");
+-                    String rua = rst.getString("rua");
+-                    String numero = rst.getString("numero");
+-                    String bairro = rst.getString("bairro");
++                try(ResultSet rst = pstm.getResultSet()){
++                    while (rst.next()){
++                        if (endereco == null){
++                            String cidade = rst.getString("cidade");
++                            String estado = rst.getString("estado");
++                            String cep = rst.getString("cep");
++                            String rua = rst.getString("rua");
++                            String numero = rst.getString("numero");
++                            String bairro = rst.getString("bairro");
+ 
+-
+-                    return new EnderecoFixo(idEndereco, denuncia, cidade, estado, cep, rua, numero, bairro);
++                            endereco = new EnderecoFixo(cidade, estado, cep, rua, numero, bairro);
++                        }
++                    }
+                 }
+             }
+-            return null;
++            return endereco;
++
+         } catch (SQLException e) {
+             throw new RuntimeException(e);
+         }
+     }
+ 
+-    @Override
+     public ArrayList<Object> listarTodosLazyLoading() {
+-        DenunciaDAO ddao = new DenunciaDAO(connection);
+-
+         ArrayList<Object> enderecos = new ArrayList<>();
+ 
+         try {
+-            String sql = "SELECT idEndereco, idDenuncia, cidade, estado, cep, rua, numero, bairro FROM endereco_fixo";
++            String sql = "SELECT cidade, estado, cep, rua, numero, bairro FROM endereco_fixo";
+ 
+             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                 pstm.execute();
+                 ResultSet rst = pstm.getResultSet();
+                 while (rst.next()) {
+-                    int idEndereco = rst.getInt("idEndereco");
+-                    int idDenuncia = rst.getInt("idDenuncia");
+-                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
+                     String cidade = rst.getString("cidade");
+                     String estado = rst.getString("estado");
+                     String cep = rst.getString("cep");
+                     String rua = rst.getString("rua");
+                     String numero = rst.getString("numero");
+                     String bairro = rst.getString("bairro");
+-                    EnderecoFixo e = new EnderecoFixo(idEndereco, denuncia, cidade, estado, cep, rua, numero, bairro);
+-                    enderecos.add(e);
++
++
++                    EnderecoFixo endereco = new EnderecoFixo(cidade, estado, cep, rua, numero, bairro);
++                    enderecos.add(endereco);
+                 }
+             }
+             return enderecos;
+@@ -113,30 +133,24 @@
+         }
+     }
+ 
+-    @Override
+-    public ArrayList<Object> listarTodosEagerLoading() {
+-        return listarTodosLazyLoading();
+-    }
+-
+-    @Override
+     public void atualizar(Object objeto) {
+         if (!(objeto instanceof EnderecoFixo)) {
+-            throw new IllegalArgumentException("Objeto deve ser do tipo Midia.");
++            throw new IllegalArgumentException("Objeto deve ser do tipo EnderecoFixo.");
+         }
+ 
+-        EnderecoFixo enderecoFixo = (EnderecoFixo) objeto;
++        EnderecoFixo endereco = (EnderecoFixo) objeto;
+ 
+-        String sql = "UPDATE endereco_fixo SET idDenuncia = ?, cidade = ?, estado = ?, cep = ?, rua = ?, numero = ?, bairro = ? WHERE idMidia = ?";
++        // Atualizar os dados principais da denúncia
++        String sql = "UPDATE endereco_fixo SET cep = ? and numero = ? and bairro = ? and cidade = ? and estado = ? and rua = ?";
+ 
+         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+ 
+-            pstm.setInt(1, enderecoFixo.getDenuncia().getIdDenuncia());
+-            pstm.setString(2, enderecoFixo.getCidade());
+-            pstm.setString(3, enderecoFixo.getEstado());
+-            pstm.setString(5, enderecoFixo.getCep());
+-            pstm.setString(6, enderecoFixo.getRua());
+-            pstm.setString(7, enderecoFixo.getNumero());
+-            pstm.setString(3, enderecoFixo.getBairro());
++            pstm.setString(1, endereco.getCep());
++            pstm.setString(2, endereco.getNumero());
++            pstm.setString(3, endereco.getBairro());
++            pstm.setString(4, endereco.getCidade());
++            pstm.setString(5, endereco.getEstado());
++            pstm.setString(6, endereco.getRua());
+ 
+             int linhasAfetadas = pstm.executeUpdate();
+ 
+@@ -144,14 +158,12 @@
+                 throw new SQLException("Falha ao atualizar: nenhuma linha foi afetada.");
+             }
+ 
+-
+         } catch (SQLException e) {
+             e.printStackTrace();
+-            throw new RuntimeException("Erro ao atualizar endereco: " + e.getMessage());
++            throw new RuntimeException("Erro ao atualizar denuncia: " + e.getMessage());
+         }
+     }
+ 
+-    @Override
+     public void excluir(int id) {
+         try {
+             String sql = "DELETE FROM endereco_fixo WHERE idEndereco = ?";
+@@ -170,7 +182,4 @@
+             throw new RuntimeException(e);
+         }
+     }
+-
+-    }
+-
+-
++}
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"c480f901-a18e-4420-baea-2bb3df9697f4\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"PREVIOUS_COMMIT_AUTHORS\">\r\n      <list>\r\n        <option value=\"Marcelle Lohane &lt;162730528+marcelleloha@users.noreply.github.com&gt;\" />\r\n      </list>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;marcelleloha&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\"><![CDATA[{\r\n  \"selectedUrlAndAccountId\": {\r\n    \"url\": \"https://github.com/marcelleloha/AP2_poo.git\",\r\n    \"accountId\": \"2d8048f9-e6ab-4d12-93c0-195f2ee2ae6b\"\r\n  }\r\n}]]></component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 8\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2y6rgChdbRry7f9T2n0hctQEQEO\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;main&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.appearance&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26094.121\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-IU-251.26094.121\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"c480f901-a18e-4420-baea-2bb3df9697f4\" name=\"Changes\" comment=\"\" />\r\n      <created>1749165975956</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1749165975956</updated>\r\n      <workItem from=\"1749393126513\" duration=\"48000\" />\r\n      <workItem from=\"1749393199848\" duration=\"3821000\" />\r\n      <workItem from=\"1749406088666\" duration=\"2238000\" />\r\n      <workItem from=\"1749412552534\" duration=\"190000\" />\r\n      <workItem from=\"1749586808120\" duration=\"149000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"midias e localizacoes\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1749396926592</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1749396926592</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"CUSTOM_BOOLEAN_PROPERTIES\">\r\n                <map>\r\n                  <entry key=\"Show.Git.Branches\" value=\"true\" />\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"finalizando DenunciaDAO\" />\r\n    <MESSAGE value=\"classes midias e localizacao\" />\r\n    <MESSAGE value=\"midas e localizacao\" />\r\n    <MESSAGE value=\"midias e localizacoes\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"midias e localizacoes\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 3299be7c763f45515bc1121cfa0fc8ee2aefe0e6)
++++ b/.idea/workspace.xml	(date 1749598241299)
+@@ -5,12 +5,26 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="c480f901-a18e-4420-baea-2bb3df9697f4" name="Changes" comment="">
++<<<<<<< HEAD
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++=======
++      <change afterPath="$PROJECT_DIR$/SistemaDenuncias/src/dao/ComentarioDAO.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/dao/EnderecoFixoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/dao/EnderecoFixoDAO.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Comentario.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Comentario.java" afterDir="false" />
++>>>>>>> 47ff988c63b990962c5d58b6d7173388bc52f719
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Class" />
++      </list>
++    </option>
+   </component>
+   <component name="Git.Settings">
+     <option name="PREVIOUS_COMMIT_AUTHORS">
+@@ -26,12 +40,19 @@
+     &quot;assignee&quot;: &quot;marcelleloha&quot;
+   }
+ }</component>
++<<<<<<< HEAD
+   <component name="GithubPullRequestsUISettings"><![CDATA[{
+   "selectedUrlAndAccountId": {
+     "url": "https://github.com/marcelleloha/AP2_poo.git",
+     "accountId": "2d8048f9-e6ab-4d12-93c0-195f2ee2ae6b"
++=======
++  <component name="GithubPullRequestsUISettings">{
++  &quot;selectedUrlAndAccountId&quot;: {
++    &quot;url&quot;: &quot;https://github.com/marcelleloha/AP2_poo.git&quot;,
++    &quot;accountId&quot;: &quot;5e176b60-0dc6-48c7-a306-0b90015b38bd&quot;
++>>>>>>> 47ff988c63b990962c5d58b6d7173388bc52f719
+   }
+-}]]></component>
++}</component>
+   <component name="ProjectColorInfo">{
+   &quot;associatedIndex&quot;: 8
+ }</component>
+Index: SistemaDenuncias/src/modelo/Comentario.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package modelo;\r\n\r\nimport java.time.LocalDateTime;\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\npublic class Comentario implements Votavel {\r\n    private int idComentario;\r\n    private Usuario autor;\r\n    private Denuncia denuncia;\r\n    private String conteudo;\r\n    private LocalDateTime data;\r\n    private Set<Usuario> votos;\r\n\r\n    // Comentário que veio do banco\r\n    public Comentario(int idComentario, Usuario autor, Denuncia denuncia, String conteudo, LocalDateTime data) {\r\n        this.idComentario = idComentario;\r\n        this.autor = autor;\r\n        this.denuncia = denuncia;\r\n        this.conteudo = conteudo;\r\n        this.data = data;\r\n\r\n        this.votos = new HashSet<Usuario>();\r\n    }\r\n\r\n    // Comentário novo, sem ID e nem votos\r\n    public Comentario(Usuario autor, Denuncia denuncia, String conteudo, LocalDateTime data) {\r\n        this.autor = autor;\r\n        this.denuncia = denuncia;\r\n        this.conteudo = conteudo;\r\n        this.data = data;\r\n\r\n        this.votos = new HashSet<Usuario>();\r\n    }\r\n\r\n    public int getIdComentario() {\r\n        return idComentario;\r\n    }\r\n\r\n    public Usuario getAutor() {\r\n        return autor;\r\n    }\r\n\r\n    public Denuncia getDenuncia() {\r\n        return denuncia;\r\n    }\r\n\r\n    public String getConteudo() {\r\n        return conteudo;\r\n    }\r\n\r\n    public LocalDateTime getData() {\r\n        return data;\r\n    }\r\n\r\n    public Set<Usuario> getVotos() {\r\n        return votos;\r\n    }\r\n\r\n    public void setIdComentario(int idComentario) {\r\n        this.idComentario = idComentario;\r\n    }\r\n\r\n    public void receberVoto(Usuario u, Integer voto) {\r\n        votos.add(u);\r\n    }\r\n    public void removerVoto(Usuario u) {\r\n        votos.remove(u);\r\n    }\r\n\r\n    public void editarComentario(String novoConteudo) {\r\n        this.conteudo = novoConteudo;\r\n    }\r\n\r\n    public int numeroVotos () {\r\n        return votos.size();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/SistemaDenuncias/src/modelo/Comentario.java b/SistemaDenuncias/src/modelo/Comentario.java
+--- a/SistemaDenuncias/src/modelo/Comentario.java	(revision 3299be7c763f45515bc1121cfa0fc8ee2aefe0e6)
++++ b/SistemaDenuncias/src/modelo/Comentario.java	(date 1749598170242)
+@@ -1,6 +1,6 @@
+ package modelo;
+ 
+-import java.time.LocalDateTime;
++import java.sql.Date;
+ import java.util.HashSet;
+ import java.util.Set;
+ 
+@@ -9,11 +9,11 @@
+     private Usuario autor;
+     private Denuncia denuncia;
+     private String conteudo;
+-    private LocalDateTime data;
++    private Date data;
+     private Set<Usuario> votos;
+ 
+     // Comentário que veio do banco
+-    public Comentario(int idComentario, Usuario autor, Denuncia denuncia, String conteudo, LocalDateTime data) {
++    public Comentario(int idComentario, Usuario autor, Denuncia denuncia, String conteudo, Date data) {
+         this.idComentario = idComentario;
+         this.autor = autor;
+         this.denuncia = denuncia;
+@@ -24,7 +24,7 @@
+     }
+ 
+     // Comentário novo, sem ID e nem votos
+-    public Comentario(Usuario autor, Denuncia denuncia, String conteudo, LocalDateTime data) {
++    public Comentario(Usuario autor, Denuncia denuncia, String conteudo, Date data) {
+         this.autor = autor;
+         this.denuncia = denuncia;
+         this.conteudo = conteudo;
+@@ -49,7 +49,7 @@
+         return conteudo;
+     }
+ 
+-    public LocalDateTime getData() {
++    public Date getData() {
+         return data;
+     }
+ 
+Index: SistemaDenuncias/src/modelo/EnderecoFixo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package modelo;\r\n\r\npublic class EnderecoFixo extends Localizacao {\r\n    private String cep;\r\n    private String rua;\r\n    private String numero;\r\n    private String bairro;\r\n\r\n    public EnderecoFixo(Denuncia denuncia, String cidade, String estado, String cep, String rua, String numero, String bairro) {\r\n        super(denuncia, cidade, estado);\r\n        this.cep = cep;\r\n        this.rua = rua;\r\n        this.numero = numero;\r\n        this.bairro = bairro;\r\n    }\r\n\r\n    // construtor do banco\r\n    public EnderecoFixo(int idEndereco, Denuncia denuncia, String cidade, String estado, String cep, String rua, String numero, String bairro) {\r\n        super(denuncia, cidade, estado);\r\n        this.cep = cep;\r\n        this.rua = rua;\r\n        this.numero = numero;\r\n        this.bairro = bairro;\r\n    }\r\n\r\n\r\n    public String getCep() {\r\n        return cep;\r\n    }\r\n\r\n    public String getRua() {\r\n        return rua;\r\n    }\r\n\r\n    public String getNumero() {\r\n        return numero;\r\n    }\r\n\r\n    public String getBairro() {\r\n        return bairro;\r\n    }\r\n\r\n    @Override\r\n    public String formatar() {\r\n        return \"Cep: \" + this.cep + \", Rua: \" + this.rua + \", Numero: \" + this.numero + \", Bairro: \" + this.bairro;\r\n    }\r\n\r\n    public void setIdEndereco(int IdEndereco) {\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/SistemaDenuncias/src/modelo/EnderecoFixo.java b/SistemaDenuncias/src/modelo/EnderecoFixo.java
+--- a/SistemaDenuncias/src/modelo/EnderecoFixo.java	(revision 3299be7c763f45515bc1121cfa0fc8ee2aefe0e6)
++++ b/SistemaDenuncias/src/modelo/EnderecoFixo.java	(date 1749598170242)
+@@ -1,10 +1,16 @@
+ package modelo;
+ 
++import dao.DenunciaDAO;
++import dao.EnderecoFixoDAO;
++
++import java.sql.Connection;
++
+ public class EnderecoFixo extends Localizacao {
+     private String cep;
+     private String rua;
+     private String numero;
+     private String bairro;
++    private int idEndereco;
+ 
+     public EnderecoFixo(Denuncia denuncia, String cidade, String estado, String cep, String rua, String numero, String bairro) {
+         super(denuncia, cidade, estado);
+@@ -40,6 +46,21 @@
+         return bairro;
+     }
+ 
++    public void setIdEndereco(int id){ idEndereco = id; }
++
++    public boolean persistirEndereco(Connection connection) {
++        // verificar se já existe outra denúncia igual no sistema (mesma categoria e local) antes de criar. se já houver uma igual, retorna false
++        EnderecoFixoDAO ddao = new EnderecoFixoDAO(connection);
++        if (!ddao.existeEnderecoIgual(this)) {
++            ddao.salvar(this);
++            System.out.println("Denúncia salva no banco de dados com sucesso!");
++            return true;
++        } else {
++            System.out.println("Já existe uma denúncia com mesma categoria no mesmo local!");
++            return false;
++        }
++    }
++
+     @Override
+     public String formatar() {
+         return "Cep: " + this.cep + ", Rua: " + this.rua + ", Numero: " + this.numero + ", Bairro: " + this.bairro;
+Index: SistemaDenuncias/src/dao/ComentarioDAO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/SistemaDenuncias/src/dao/ComentarioDAO.java b/SistemaDenuncias/src/dao/ComentarioDAO.java
+new file mode 100644
+--- /dev/null	(date 1749598170242)
++++ b/SistemaDenuncias/src/dao/ComentarioDAO.java	(date 1749598170242)
+@@ -0,0 +1,163 @@
++package dao;
++
++import modelo.Comentario;
++import modelo.Denuncia;
++import modelo.EnderecoFixo;
++import modelo.Usuario;
++
++import java.sql.*;
++import java.util.ArrayList;
++
++public class ComentarioDAO {
++    private Connection connection;
++
++    public ComentarioDAO(Connection connection) {
++        this.connection = connection;
++    }
++
++    public void salvar(Object objeto){
++
++        if (!(objeto instanceof Comentario)) {
++            throw new IllegalArgumentException("Objeto deve ser do tipo Comentario.");
++        }
++
++        Comentario comentario = (Comentario) objeto;
++
++        try{
++            String sql = "INSERT INTO endereco_fixo (idAutor, idDenuncia, conteudo, data) VALUES(?,?,?,?)";
++
++            try(PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
++
++                pstm.setInt(1, comentario.getAutor().getIdUsuario()); //Define o primeiro ?
++                pstm.setInt(2, comentario.getDenuncia().getIdDenuncia()); //Define o segundo ?
++                pstm.setString(3, comentario.getConteudo()); //Define o terceiro ?
++                pstm.setDate(4, comentario.getData());
++
++                pstm.execute();
++
++                try (ResultSet rst = pstm.getGeneratedKeys()) {
++                    while (rst.next()) {
++                        comentario.setIdComentario(rst.getInt(1));
++                    }
++                }
++            }
++        } catch (SQLException e) {
++            throw new RuntimeException(e);
++        }
++    }
++
++    public Comentario buscarPorId(int id){
++        UsuarioDAO udao = new UsuarioDAO(connection);
++        DenunciaDAO ddao = new DenunciaDAO(connection);
++
++        Comentario comentario = null;
++
++        try {
++
++            String sql ="""
++                        SELECT idAutor, idDenuncia, conteudo, data
++                        FROM comentario
++                        WHERE idComentario = ?
++                        """;
++            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
++                pstm.setInt(1, id);
++                pstm.execute();
++                try(ResultSet rst = pstm.getResultSet()){
++                    while (rst.next()){
++                        if (comentario == null){
++                            String conteudo = rst.getString("conteudo");
++                            Date data = rst.getDate("data");
++                            int idAutor = rst.getInt("idAutor");
++                            int idDenuncia = rst.getInt("idDenuncia");
++                            Usuario autor = (Usuario) udao.buscarPorId(idAutor);
++                            Denuncia denuncia = ddao.buscarPorId(idDenuncia);
++
++                            comentario = new Comentario(id, autor, denuncia, conteudo, data);
++                        }
++                    }
++                }
++            }
++            return comentario;
++
++        } catch (SQLException e) {
++            throw new RuntimeException(e);
++        }
++    }
++
++    public ArrayList<Object> listarTodosLazyLoading() {
++        UsuarioDAO udao = new UsuarioDAO(connection);
++        DenunciaDAO ddao = new DenunciaDAO(connection);
++        ArrayList<Object> comentarios = new ArrayList<>();
++
++        try {
++            String sql = "SELECT idAutor, idDenuncia, conteudo, data FROM comentario";
++
++            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
++                pstm.execute();
++                ResultSet rst = pstm.getResultSet();
++                while (rst.next()) {
++                    int idAutor = rst.getInt("idAutor");
++                    int idDenuncia = rst.getInt("idDenuncia");
++                    Usuario autor = (Usuario) udao.buscarPorId(idAutor);
++                    Denuncia denuncia = ddao.buscarPorId(idDenuncia);
++                    String conteudo = rst.getString("conteudo");
++                    Date data = rst.getDate("data");
++
++                    Comentario comentario = new Comentario(autor, denuncia, conteudo, data);
++                    comentarios.add(comentario);
++                }
++            }
++            return comentarios;
++        } catch (SQLException e) {
++            throw new RuntimeException(e);
++        }
++    }
++
++    public void atualizar(Object objeto) {
++        if (!(objeto instanceof Comentario)) {
++            throw new IllegalArgumentException("Objeto deve ser do tipo Comentario.");
++        }
++
++        Comentario comentario = (Comentario) objeto;
++
++        // Atualizar os dados principais da denúncia
++        String sql = "UPDATE comentario SET idAutor = ? and idDenuncia = ? and conteudo = ? and data = ?";
++
++        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
++
++            pstm.setInt(1, comentario.getAutor().getIdUsuario());
++            pstm.setInt(2, comentario.getDenuncia().getIdDenuncia());
++            pstm.setString(3, comentario.getConteudo());
++            pstm.setDate(4, comentario.getData());
++
++            int linhasAfetadas = pstm.executeUpdate();
++
++            if (linhasAfetadas == 0) {
++                throw new SQLException("Falha ao atualizar: nenhuma linha foi afetada.");
++            }
++
++        } catch (SQLException e) {
++            e.printStackTrace();
++            throw new RuntimeException("Erro ao atualizar denuncia: " + e.getMessage());
++        }
++    }
++
++    public void excluir(int id) {
++        try {
++            String sql = "DELETE FROM comentario WHERE idComentario = ?";
++
++            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
++                pstm.setInt(1, id);
++
++                int linhasAfetadas = pstm.executeUpdate();
++
++                if (linhasAfetadas == 0) {
++                    throw new SQLException("Falha ao deletar: nenhuma linha foi afetada.");
++                }
++
++            }
++        } catch (SQLException e) {
++            throw new RuntimeException(e);
++        }
++    }
++}
+Index: SistemaDenuncias/src/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import bd.ConnectionFactory;\r\nimport dao.DenunciaDAO;\r\nimport dao.UsuarioDAO;\r\nimport modelo.*;\r\n\r\nimport java.sql.Connection;\r\nimport java.time.LocalDateTime;\r\nimport java.util.ArrayList;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n        // Conectando com o banco\r\n        ConnectionFactory fabricaDeConexao = new ConnectionFactory();\r\n        Connection connection = fabricaDeConexao.recuperaConexao();\r\n\r\n        // Criando DAOs\r\n        UsuarioDAO udao = new UsuarioDAO(connection);\r\n        DenunciaDAO ddao = new DenunciaDAO(connection);\r\n\r\n        // Iniciando testes\r\n        Localizacao local = new PontoDeReferencia(\"Rio de janeiro\", \"RJ\", \"Pedra grande no fim da esquina\", \"lá\");\r\n\r\n        Usuario u1 = new Usuario(\"Eduardo Peruzzo\", \"eduardo@email.com\", \"jorge\");\r\n        Denuncia d1 = new Denuncia(u1, \"Buraco enorme na frente da minha casa\", Categoria.BURACO_NA_RUA, \"Não consigo sair com o carro por causa desse buracão\", local, LocalDateTime.now());\r\n\r\n        udao.salvar(u1);\r\n        d1.persistirDenuncia(connection);\r\n\r\n        d1.receberVoto(u1, 9);\r\n        d1.receberVoto(u1, 8);\r\n\r\n        Usuario u2 = new Usuario(\"Estevão\", \"estevao@email.com\", \"jorge2\");\r\n\r\n        d1.receberVoto(u2, 10);\r\n        d1.receberConfirmacao(u2);\r\n\r\n        udao.salvar(u2);\r\n\r\n        ddao.atualizar(d1);\r\n\r\n        Denuncia d2 = new Denuncia(u1, \"Buraco enorme na frente da casa do vizinho\", Categoria.BURACO_NA_RUA, \"Não consigo sair com o carro por causa desse buracão\", local, LocalDateTime.now());\r\n        Denuncia d3 = new Denuncia(u2, \"Buraco enorme na frente da casa do vizinho\", Categoria.BURACO_NA_RUA, \"Não consigo sair com o carro por causa desse buracão\", local, LocalDateTime.now());\r\n\r\n        d2.persistirDenuncia(connection);\r\n        d3.persistirDenuncia(connection);\r\n\r\n        ArrayList<Object> denuncias = ddao.listarTodosEagerLoading();\r\n\r\n        for (Object denuncia : denuncias) {\r\n            System.out.println(denuncia);\r\n        }\r\n\r\n        Denuncia denunciaId1 = ddao.buscarPorId(1);\r\n        System.out.println(denunciaId1);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/SistemaDenuncias/src/Main.java b/SistemaDenuncias/src/Main.java
+--- a/SistemaDenuncias/src/Main.java	(revision 3299be7c763f45515bc1121cfa0fc8ee2aefe0e6)
++++ b/SistemaDenuncias/src/Main.java	(date 1749598170242)
+@@ -3,9 +3,12 @@
+ import dao.UsuarioDAO;
+ import modelo.*;
+ 
++import javax.xml.transform.Source;
+ import java.sql.Connection;
++import java.sql.PreparedStatement;
+ import java.time.LocalDateTime;
+ import java.util.ArrayList;
++import java.util.Map;
+ 
+ public class Main {
+     public static void main(String[] args) {
+@@ -19,6 +22,8 @@
+ 
+         // Iniciando testes
+         Localizacao local = new PontoDeReferencia("Rio de janeiro", "RJ", "Pedra grande no fim da esquina", "lá");
++        EnderecoFixo local2 = new EnderecoFixo("Santo André", "SP", "22790-555", "Av. Selector", "13.500", "Pedra");
++        local2.persistirEndereco(connection);
+ 
+         Usuario u1 = new Usuario("Eduardo Peruzzo", "eduardo@email.com", "jorge");
+         Denuncia d1 = new Denuncia(u1, "Buraco enorme na frente da minha casa", Categoria.BURACO_NA_RUA, "Não consigo sair com o carro por causa desse buracão", local, LocalDateTime.now());
+@@ -52,5 +57,15 @@
+ 
+         Denuncia denunciaId1 = ddao.buscarPorId(1);
+         System.out.println(denunciaId1);
++        System.out.println("Votos da denúncia 1 ->");
++        for (Map.Entry<Usuario, Integer> entry : d1.getVotosPrioridade().entrySet()) {
++            System.out.println("Usuário: " + entry.getKey().getNome() + ", Voto: " + entry.getValue());
++        }
++        System.out.println("Média de votos da denúncia 1: " + d1.calcularMediaVotos());
++        System.out.println("Quantidade de confirmações da denúncia 1: " + d1.getConfirmacoes().size());
++        System.out.println("Usuários que confirmaram a denúncia 1 ->");
++        for (Usuario u : d1.getConfirmacoes()) {
++            System.out.println(u);
++        }
+     }
+ }
+\ No newline at end of file

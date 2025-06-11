@@ -1,0 +1,34 @@
+<changelist name="Uncommitted_changes_before_Update_at_10_06_2025_20_31_[Changes]" date="1749598271592" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_06_2025_20_31_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 10/06/2025 20:31 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="SistemaDenuncias/target/classes/dao/DenunciaDAO.class" />
+    <option name="AFTER_PATH" value="SistemaDenuncias/target/classes/dao/DenunciaDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_06_2025_20_31_[Changes]/DenunciaDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="SistemaDenuncias/target/classes/dao/UsuarioDAO.class" />
+    <option name="AFTER_PATH" value="SistemaDenuncias/target/classes/dao/UsuarioDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_06_2025_20_31_[Changes]/UsuarioDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="SistemaDenuncias/target/classes/modelo/Midia.class" />
+    <option name="AFTER_PATH" value="SistemaDenuncias/target/classes/modelo/Midia.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_06_2025_20_31_[Changes]/Midia.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="SistemaDenuncias/target/classes/Main.class" />
+    <option name="AFTER_PATH" value="SistemaDenuncias/target/classes/Main.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_06_2025_20_31_[Changes]/Main.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="SistemaDenuncias/target/classes/dao/MidiaDAO.class" />
+    <option name="AFTER_PATH" value="SistemaDenuncias/target/classes/dao/MidiaDAO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_06_2025_20_31_[Changes]/MidiaDAO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="SistemaDenuncias/target/classes/modelo/Denuncia.class" />
+    <option name="AFTER_PATH" value="SistemaDenuncias/target/classes/modelo/Denuncia.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_06_2025_20_31_[Changes]/Denuncia.class" />
+  </binary>
+</changelist>
