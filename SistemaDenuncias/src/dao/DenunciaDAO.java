@@ -125,6 +125,8 @@ public class DenunciaDAO implements BaseDAO{
 
         Localizacao localizacao = null;
 
+        Midia ultimaMidia = null;
+
         try {
             String sql = """
             SELECT d.idDenuncia, d.idCriador, d.titulo, d.categoria, d.descricao, d.dtDenuncia, ef.idEndereco, co.idCoordenada, pr.idPonto, v.valor_voto, v.idUsuario as idVotante, c.idUsuario as idConfirmador, m.idMidia
@@ -161,10 +163,8 @@ public class DenunciaDAO implements BaseDAO{
 
                             } else if (rst.getInt("idPonto") != 0) {
                                 int idPonto = rst.getInt("idPonto");
-                                System.out.println("Entrou no if do ponto de referência: " + idPonto);
                                 PontoDeReferenciaDAO pdao = new PontoDeReferenciaDAO(connection);
                                 localizacao = (PontoDeReferencia) pdao.buscarPorId(idPonto);
-                                System.out.println(localizacao);
 
                             } else if (rst.getInt("idCoordenada") != 0) {
                                 int idCoordenada = rst.getInt("idCoordenada");
@@ -193,10 +193,11 @@ public class DenunciaDAO implements BaseDAO{
 
                         // Adiciona mídia
                         int idMidia = rst.getInt("idMidia");
-                        if (idMidia != 0) {
+                        if (idMidia != 0 && ultimaMidia == null || idMidia != 0 && idMidia != ultimaMidia.getIdMidia()) {
                             MidiaDAO mdao = new MidiaDAO(connection);
                             Midia midia = (Midia) mdao.buscarPorId(idMidia, denuncia);
                             denuncia.addMidia(midia);
+                            ultimaMidia = midia;
                         }
                     }
                 }
@@ -314,6 +315,7 @@ public class DenunciaDAO implements BaseDAO{
 
         ArrayList<Object> denuncias =new ArrayList<>();
         Denuncia ultima = null;
+        Midia ultimaMidia = null;
 
         Localizacao localizacao = null;
 
@@ -361,6 +363,7 @@ public class DenunciaDAO implements BaseDAO{
                             Denuncia denuncia = new Denuncia(idDenuncia, criador, titulo, categoria, descricao, localizacao, dtDenuncia);
                             denuncias.add(denuncia);
                             ultima = denuncia;
+                            ultimaMidia = null;
                         }
 
                         // Adiciona voto
@@ -380,9 +383,10 @@ public class DenunciaDAO implements BaseDAO{
 
                         // Adiciona mídia
                         int idMidia = rst.getInt("idMidia");
-                        if (idMidia != 0) {
+                        if (idMidia != 0 && ultimaMidia == null || idMidia != 0 && idMidia != ultimaMidia.getIdMidia()) {
                             Midia midia = (Midia) mdao.buscarPorId(idMidia, ultima);
                             ultima.addMidia(midia);
+                            ultimaMidia = midia;
                         }
                     }
                 }

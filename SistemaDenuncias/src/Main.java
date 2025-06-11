@@ -58,6 +58,7 @@ public class Main {
         d1.receberVoto(u1, 9);
         d1.receberVoto(u2, 8);
         d1.receberVoto(u3, 10);
+        d1.receberVoto(u1, 10);
         d1.receberConfirmacao(u3);
         ddao.atualizar(d1);
 
