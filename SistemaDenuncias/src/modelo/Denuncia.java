@@ -99,7 +99,9 @@ public class Denuncia implements Votavel {
 
     @Override
     public void receberVoto(Usuario u, Integer voto) {
-        votosPrioridade.put(u, voto);
+        if (1 <= voto && voto <= 10) {
+            votosPrioridade.put(u, voto);
+        } else System.out.println("Valor do voto deve estar entre 1 e 10.");
     }
 
     @Override
