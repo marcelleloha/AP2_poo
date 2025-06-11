@@ -66,7 +66,7 @@ CREATE TABLE midia (
 CREATE TABLE endereco_fixo (
 	idEndereco INT AUTO_INCREMENT PRIMARY KEY,
     idDenuncia INT,
-    cep VARCHAR(8),
+    cep VARCHAR(10),
     rua TEXT,
     numero VARCHAR(10),
     bairro TEXT,

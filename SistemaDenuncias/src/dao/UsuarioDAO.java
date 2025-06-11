@@ -74,6 +74,19 @@ public class UsuarioDAO implements BaseDAO {
         }
     }
 
+    public boolean existeUsuarioIgual(Usuario usuario) {
+        String sql = "SELECT 1 FROM usuario WHERE nome = ? AND email = ? LIMIT 1";
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, usuario.getNome());
+            pstm.setString(2, usuario.getEmail());
+            try (ResultSet rst = pstm.executeQuery()) {
+                return rst.next(); // true se encontrou algum usuário igual
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ArrayList<Object> listarTodosLazyLoading() {
 
         ArrayList<Object> usuarios = new ArrayList<>();

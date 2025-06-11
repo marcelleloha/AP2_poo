@@ -50,7 +50,7 @@ public class CoordenadasDAO implements BaseDAO {
     public Object buscarPorId(int id) {
         DenunciaDAO ddao = new DenunciaDAO(connection);
         try {
-            String sql = "SELECT idCoordenada, idDenuncia, cidade, estado, latitude, longitude FROM coordenada WHERE idCoordenada = ?";
+            String sql = "SELECT idCoordenada, idDenuncia, cidade, estado, latitude, longitude FROM coordenadas WHERE idCoordenada = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setInt(1, id);

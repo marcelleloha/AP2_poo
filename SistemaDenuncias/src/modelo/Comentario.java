@@ -1,5 +1,8 @@
 package modelo;
 
+import dao.ComentarioDAO;
+
+import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -70,6 +73,12 @@ public class Comentario implements Votavel {
 
     public void editarComentario(String novoConteudo) {
         this.conteudo = novoConteudo;
+    }
+
+    public void persistirComentario(Connection connection) {
+        ComentarioDAO cdao = new ComentarioDAO(connection);
+        cdao.salvar(this);
+        System.out.println("Comentário persistido com sucesso!");
     }
 
     @Override

@@ -1,5 +1,9 @@
 package modelo;
 
+import dao.UsuarioDAO;
+
+import java.sql.Connection;
+
 public class Usuario {
     private int idUsuario;
     private String nome;
@@ -46,6 +50,19 @@ public class Usuario {
             this.senha = novaSenha;
             System.out.println("Senha alterada com sucesso.");
         } else System.out.println("A nova senha não pode ser igual à antiga!");
+    }
+
+    public boolean persistirUsuario(Connection connection) {
+        UsuarioDAO udao = new UsuarioDAO(connection);
+        if(!udao.existeUsuarioIgual(this)){
+            udao.salvar(this);
+            return true;
+        }
+        else {
+            System.out.println("Usuário já existe no banco de dados.");
+            return false;
+        }
+
     }
 
     @Override

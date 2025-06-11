@@ -5,12 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c480f901-a18e-4420-baea-2bb3df9697f4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/bd/ConnectionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/bd/ConnectionFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/dao/CoordenadasDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/dao/CoordenadasDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/dao/UsuarioDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/dao/UsuarioDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Comentario.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Comentario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Coordenadas.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Coordenadas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Denuncia.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Denuncia.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/EnderecoFixo.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/EnderecoFixo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Localizacao.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Localizacao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/PontoDeReferencia.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/PontoDeReferencia.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/bd/ConnectionFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/bd/ConnectionFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/CoordenadasDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/CoordenadasDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/DenunciaDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/DenunciaDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/EnderecoFixoDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/EnderecoFixoDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/UsuarioDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/UsuarioDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Comentario.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Comentario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Coordenadas.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Coordenadas.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Denuncia.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Denuncia.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/EnderecoFixo.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/EnderecoFixo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Localizacao.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Localizacao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/PontoDeReferencia.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/PontoDeReferencia.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Usuario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Votavel.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Votavel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/script-criacao-tabelas.sql" beforeDir="false" afterPath="$PROJECT_DIR$/script-criacao-tabelas.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +67,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -55,22 +77,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Maven.SistemaDenuncias [clean,install].executor": "Run",
+    "Maven.SistemaDenuncias [install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "settings.qodana",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn install" />
+      <command value="mvn clean install" />
+    </option>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="c480f901-a18e-4420-baea-2bb3df9697f4" name="Changes" comment="" />
