@@ -208,6 +208,73 @@ public class DenunciaDAO implements BaseDAO{
         }
     }
 
+    public int buscarPorCategoriaLocalizacao(Categoria categoria, Localizacao localizacao) {
+        String sql;
+        try {
+            if (localizacao instanceof EnderecoFixo ef) {
+                sql = """
+                SELECT d.idDenuncia
+                FROM denuncia d
+                JOIN endereco_fixo ef ON d.idDenuncia = ef.idDenuncia
+                WHERE d.categoria = ? AND ef.cep = ? AND ef.numero = ? AND ef.bairro = ? AND ef.cidade = ? AND ef.estado = ?
+            """;
+                try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                    pstm.setString(1, categoria.name());
+                    pstm.setString(2, ef.getCep());
+                    pstm.setString(3, ef.getNumero());
+                    pstm.setString(4, ef.getBairro());
+                    pstm.setString(5, ef.getCidade());
+                    pstm.setString(6, ef.getEstado());
+                    try (ResultSet rst = pstm.executeQuery()) {
+                        if (rst.next()) {
+                            return rst.getInt("idDenuncia");
+                        }
+                    }
+                }
+            } else if (localizacao instanceof Coordenadas c) {
+                sql = """
+                SELECT d.idDenuncia
+                FROM denuncia d
+                JOIN coordenadas co ON d.idDenuncia = co.idDenuncia
+                WHERE d.categoria = ? AND ABS(co.latitude - ?) < 0.00005 AND ABS(co.longitude - ?) < 0.00005 AND co.cidade = ? AND co.estado = ?
+            """;
+                try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                    pstm.setString(1, categoria.name());
+                    pstm.setDouble(2, c.getLatitude());
+                    pstm.setDouble(3, c.getLongitude());
+                    pstm.setString(4, c.getCidade());
+                    pstm.setString(5, c.getEstado());
+                    try (ResultSet rst = pstm.executeQuery()) {
+                        if (rst.next()) {
+                            return rst.getInt("idDenuncia");
+                        }
+                    }
+                }
+            } else if (localizacao instanceof PontoDeReferencia p) {
+                sql = """
+                SELECT d.idDenuncia
+                FROM denuncia d
+                JOIN ponto_referencia pr ON d.idDenuncia = pr.idDenuncia
+                WHERE d.categoria = ? AND pr.nomePonto = ? AND pr.cidade = ? AND pr.estado = ?
+            """;
+                try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                    pstm.setString(1, categoria.name());
+                    pstm.setString(2, p.getNome());
+                    pstm.setString(3, p.getCidade());
+                    pstm.setString(4, p.getEstado());
+                    try (ResultSet rst = pstm.executeQuery()) {
+                        if (rst.next()) {
+                            return rst.getInt("idDenuncia");
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0; // Não encontrou
+    }
+
     public ArrayList<Object> listarTodosLazyLoading() {
         UsuarioDAO udao = new UsuarioDAO(connection);
         ArrayList<Object> denuncias = new ArrayList<>();

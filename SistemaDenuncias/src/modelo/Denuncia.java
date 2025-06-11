@@ -162,6 +162,8 @@ public class Denuncia implements Votavel {
             return true;
         } else {
             System.out.println("Já existe uma denúncia com mesma categoria no mesmo local!");
+            this.idDenuncia = ddao.buscarPorCategoriaLocalizacao(this.categoria, this.localizacao);
+            System.out.println("ID da denúncia já existente: " + this.idDenuncia);
             return false;
         }
     }

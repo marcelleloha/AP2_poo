@@ -60,6 +60,8 @@ public class Usuario {
         }
         else {
             System.out.println("Usuário já existe no banco de dados.");
+            Usuario u = udao.buscarPorNomeEmail(this.nome, this.email);
+            this.idUsuario = u.getIdUsuario();
             return false;
         }
 

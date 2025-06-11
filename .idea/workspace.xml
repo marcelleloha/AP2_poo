@@ -5,34 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c480f901-a18e-4420-baea-2bb3df9697f4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/bd/ConnectionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/bd/ConnectionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/dao/CoordenadasDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/dao/CoordenadasDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/dao/DenunciaDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/dao/DenunciaDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/dao/UsuarioDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/dao/UsuarioDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Comentario.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Comentario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Coordenadas.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Coordenadas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Denuncia.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Denuncia.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/src/modelo/Usuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/bd/ConnectionFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/bd/ConnectionFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/CoordenadasDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/CoordenadasDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/DenunciaDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/DenunciaDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/EnderecoFixoDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/EnderecoFixoDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/UsuarioDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/dao/UsuarioDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Comentario.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Comentario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Coordenadas.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Coordenadas.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Denuncia.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Denuncia.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/EnderecoFixo.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/EnderecoFixo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Localizacao.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Localizacao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/PontoDeReferencia.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/PontoDeReferencia.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Usuario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Votavel.class" beforeDir="false" afterPath="$PROJECT_DIR$/SistemaDenuncias/target/classes/modelo/Votavel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/script-criacao-tabelas.sql" beforeDir="false" afterPath="$PROJECT_DIR$/script-criacao-tabelas.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

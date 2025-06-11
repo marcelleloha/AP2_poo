@@ -19,6 +19,7 @@ public class Main {
         EnderecoFixoDAO edao = new EnderecoFixoDAO(connection);
         CoordenadasDAO coodao = new CoordenadasDAO(connection);
         MidiaDAO mdao = new MidiaDAO(connection);
+        ComentarioDAO cdao = new ComentarioDAO(connection);
 
         // Iniciando testes
         Localizacao l1 = new PontoDeReferencia("Rio de janeiro", "RJ", "Pedra grande no fim da esquina", "lá");
@@ -84,6 +85,19 @@ public class Main {
         for (Object o : usuarios) {
             Usuario usuario = (Usuario) o;
             System.out.println(usuario);
+            System.out.println();
+        }
+
+        ArrayList<Object> comentarios = cdao.listarTodosEagerLoading();
+
+        System.out.println("Comentários cadastrados no banco:");
+        System.out.println("========================================");
+        for (Object o : comentarios) {
+            Comentario comentario = (Comentario) o;
+            System.out.println("Conteúdo: " + comentario.getConteudo());
+            System.out.println("Denúncia: " + comentario.getDenuncia().getTitulo());
+            System.out.println("Usuário: " + comentario.getAutor().getNome());
+            System.out.println("Data: " + comentario.getData());
             System.out.println();
         }
     }

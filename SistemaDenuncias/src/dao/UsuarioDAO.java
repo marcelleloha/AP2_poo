@@ -74,7 +74,7 @@ public class UsuarioDAO implements BaseDAO {
         }
     }
 
-    public Object buscarPorNomeEmail(String nomeUsuario, String emailUsuario) {
+    public Usuario buscarPorNomeEmail(String nomeUsuario, String emailUsuario) {
 
         try {
             String sql = "SELECT idUsuario, nome, email, senha FROM usuario WHERE nome = ? and email = ?";
