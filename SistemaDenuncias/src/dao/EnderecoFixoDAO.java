@@ -133,10 +133,10 @@ public class EnderecoFixoDAO implements BaseDAO {
             pstm.setInt(1, enderecoFixo.getDenuncia().getIdDenuncia());
             pstm.setString(2, enderecoFixo.getCidade());
             pstm.setString(3, enderecoFixo.getEstado());
-            pstm.setString(5, enderecoFixo.getCep());
-            pstm.setString(6, enderecoFixo.getRua());
-            pstm.setString(7, enderecoFixo.getNumero());
-            pstm.setString(3, enderecoFixo.getBairro());
+            pstm.setString(4, enderecoFixo.getCep());
+            pstm.setString(5, enderecoFixo.getRua());
+            pstm.setString(6, enderecoFixo.getNumero());
+            pstm.setString(7, enderecoFixo.getBairro());
 
             int linhasAfetadas = pstm.executeUpdate();
 

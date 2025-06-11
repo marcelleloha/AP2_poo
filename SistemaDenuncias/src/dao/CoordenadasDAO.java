@@ -2,7 +2,6 @@ package dao;
 
 import modelo.Coordenadas;
 import modelo.Denuncia;
-import modelo.Midia;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,12 +22,14 @@ public class CoordenadasDAO implements BaseDAO {
         Coordenadas coordenadas = (Coordenadas) objeto;
 
         try {
-            String sql = "INSERT INTO coordenadas (idDenuncia, latitude, longitude) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO coordenadas (idDenuncia, latitude, longitude, cidade, estado) VALUES (?, ?, ?, ?, ?)";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 pstm.setObject(1, coordenadas.getDenuncia().getIdDenuncia());
                 pstm.setDouble(2, coordenadas.getLatitude());
                 pstm.setDouble(3, coordenadas.getLongitude());
+                pstm.setString(4, coordenadas.getCidade());
+                pstm.setString(5, coordenadas.getEstado());
 
                 pstm.execute();
 
@@ -62,8 +63,8 @@ public class CoordenadasDAO implements BaseDAO {
                     Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
                     String cidade = rst.getString("cidade");
                     String estado = rst.getString("estado");
-                    Double latitude = rst.getDouble("latitude");
-                    Double longitude = rst.getDouble("longitude");
+                    double latitude = rst.getDouble("latitude");
+                    double longitude = rst.getDouble("longitude");
                     return new Coordenadas(idCoordenada, denuncia, cidade, estado, latitude, longitude);
                 }
             }
@@ -91,8 +92,8 @@ public class CoordenadasDAO implements BaseDAO {
                     Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
                     String cidade = rst.getString("cidade");
                     String estado = rst.getString("estado");
-                    Double latitude = rst.getDouble("cidade");
-                    Double longitude = rst.getDouble("estado");
+                    double latitude = rst.getDouble("latitude");
+                    double longitude = rst.getDouble("longitude");
 
                     Coordenadas c = new Coordenadas(idMidia, denuncia, cidade, estado, latitude, longitude);
                     coordenadas.add(c);

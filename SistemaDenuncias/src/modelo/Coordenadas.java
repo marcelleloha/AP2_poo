@@ -1,6 +1,7 @@
 package modelo;
 
 public class Coordenadas extends Localizacao {
+    private int idCoordenada;
     private double longitude;
     private double latitude;
 
@@ -13,6 +14,7 @@ public class Coordenadas extends Localizacao {
     // construtor do banco de dados
     public Coordenadas(int idCoordenada, Denuncia denuncia, String cidade, String estado, double longitude, double latitude) {
         super(denuncia, cidade, estado);
+        this.idCoordenada = idCoordenada;
         this.longitude = longitude;
         this.latitude = latitude;
     }
@@ -25,11 +27,16 @@ public class Coordenadas extends Localizacao {
         return latitude;
     }
 
+    public int getIdCoordenada() {
+        return idCoordenada;
+    }
+
     @Override
     public String formatar() {
         return "Longitude: " + this.longitude + ", Latitude: " + this.latitude;
     }
 
     public void setIdCoordenada(int idCoordenada) {
+        this.idCoordenada = idCoordenada;
     }
 }

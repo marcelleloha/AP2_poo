@@ -23,12 +23,14 @@ public class PontoDeReferenciaDAO implements BaseDAO {
         PontoDeReferencia pontoDeReferencia = (PontoDeReferencia) objeto;
 
         try {
-            String sql = "INSERT INTO ponto_referencia (idDenuncia, nomeponto, descricaoponto) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO ponto_referencia (idDenuncia, nomePonto, descricaoPonto, cidade, estado) VALUES (?, ?, ?, ?, ?)";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                pstm.setObject(1, pontoDeReferencia.getDenuncia().getIdDenuncia());
+                pstm.setInt(1, pontoDeReferencia.getDenuncia().getIdDenuncia());
                 pstm.setString(2, pontoDeReferencia.getNome());
                 pstm.setString(3, pontoDeReferencia.getDescricao());
+                pstm.setString(4, pontoDeReferencia.getCidade());
+                pstm.setString(5, pontoDeReferencia.getEstado());
 
                 pstm.execute();
 
@@ -49,7 +51,7 @@ public class PontoDeReferenciaDAO implements BaseDAO {
     public Object buscarPorId(int id) {
         DenunciaDAO ddao = new DenunciaDAO(connection);
         try {
-            String sql = "SELECT idPonto, idDenuncia, cidade, estado, nomeponto, descricaoponto FROM ponto_referencia WHERE idPonto = ?";
+            String sql = "SELECT idPonto, idDenuncia, cidade, estado, nomePonto, descricaoPonto FROM ponto_referencia WHERE idPonto = ?";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.setInt(1, id);
@@ -62,9 +64,9 @@ public class PontoDeReferenciaDAO implements BaseDAO {
                     Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
                     String cidade = rst.getString("cidade");
                     String estado = rst.getString("estado");
-                    String nomeponto = rst.getString("nomeponto");
-                    String descricaoponto = rst.getString("descricaoponto");
-                    return new PontoDeReferencia(idPonto, denuncia, cidade, estado, nomeponto, descricaoponto);
+                    String nomePonto = rst.getString("nomePonto");
+                    String descricaoPonto = rst.getString("descricaoPonto");
+                    return new PontoDeReferencia(idPonto, denuncia, cidade, estado, nomePonto, descricaoPonto);
                 }
             }
             return null;
@@ -80,7 +82,7 @@ public class PontoDeReferenciaDAO implements BaseDAO {
         ArrayList<Object> coordenadas = new ArrayList<>();
 
         try {
-            String sql = "idPonto, idDenuncia, cidade, estado, nomeponto, descricaoponto FROM ponto_referencia";
+            String sql = "idPonto, idDenuncia, cidade, estado, nomePonto, descricaoPonto FROM ponto_referencia";
 
             try (PreparedStatement pstm = connection.prepareStatement(sql)) {
                 pstm.execute();
@@ -91,10 +93,10 @@ public class PontoDeReferenciaDAO implements BaseDAO {
                     Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
                     String cidade = rst.getString("cidade");
                     String estado = rst.getString("estado");
-                    String nomeponto = rst.getString("nomeponto");
-                    String descricaoponto = rst.getString("descricaoponto");
+                    String nomePonto = rst.getString("nomePonto");
+                    String descricaoPonto = rst.getString("descricaoPonto");
 
-                    PontoDeReferencia p = new PontoDeReferencia(idPonto, denuncia, cidade, estado, nomeponto, descricaoponto);
+                    PontoDeReferencia p = new PontoDeReferencia(idPonto, denuncia, cidade, estado, nomePonto, descricaoPonto);
                     coordenadas.add(p);
                 }
             }
@@ -117,7 +119,7 @@ public class PontoDeReferenciaDAO implements BaseDAO {
 
         PontoDeReferencia pontoDeReferencia = (PontoDeReferencia) objeto;
 
-        String sql = "UPDATE ponto_referencia SET idDenuncia = ?, cidade = ?, estado = ?, nomeponto = ?, descricaoponto = ? WHERE idCoordenada = ?";
+        String sql = "UPDATE ponto_referencia SET idDenuncia = ?, cidade = ?, estado = ?, nomePonto = ?, descricaoPonto = ? WHERE idPonto = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
 
@@ -125,7 +127,7 @@ public class PontoDeReferenciaDAO implements BaseDAO {
             pstm.setString(2, pontoDeReferencia.getCidade());
             pstm.setString(3, pontoDeReferencia.getEstado());
             pstm.setString(4, pontoDeReferencia.getNome());
-                pstm.setString(5, pontoDeReferencia.getDescricao());
+            pstm.setString(5, pontoDeReferencia.getDescricao());
 
             int linhasAfetadas = pstm.executeUpdate();
 
