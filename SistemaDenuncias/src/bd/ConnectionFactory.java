@@ -12,7 +12,7 @@ public class ConnectionFactory {
             String endereco = "localhost";
             String bd = "sistema_denuncias";
             String usuario = "root";
-            String senha = "09052005Ep!";
+            String senha = "INSIRA SENHA DO BANCO DE DADOS";
 
             Connection connection = DriverManager.getConnection("jdbc:" + sgbd + "://" + endereco + "/" + bd, usuario, senha);
 
