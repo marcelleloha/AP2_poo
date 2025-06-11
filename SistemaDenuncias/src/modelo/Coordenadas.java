@@ -6,7 +6,7 @@ public class Coordenadas extends Localizacao {
     private double latitude;
 
     public Coordenadas(Denuncia denuncia, String cidade, String estado, double longitude, double latitude) {
-        super(denuncia, cidade, estado);
+        super(cidade, estado);
         this.longitude = longitude;
         this.latitude = latitude;
     }
@@ -17,6 +17,7 @@ public class Coordenadas extends Localizacao {
         this.idCoordenada = idCoordenada;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.denuncia = denuncia;
     }
 
     public double getLongitude() {

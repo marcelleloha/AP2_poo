@@ -5,6 +5,11 @@ public abstract class Localizacao {
     protected String cidade;
     protected String estado;
 
+    public Localizacao(String cidade, String estado) {
+        this.cidade = cidade;
+        this.estado = estado;
+    }
+
     public Localizacao(Denuncia denuncia, String cidade, String estado) {
         this.denuncia = denuncia;
         this.cidade = cidade;
@@ -35,5 +40,9 @@ public abstract class Localizacao {
 
     public Denuncia getDenuncia() {
         return denuncia;
+    }
+
+    public void setDenuncia(Denuncia denuncia) {
+        this.denuncia = denuncia;
     }
 }

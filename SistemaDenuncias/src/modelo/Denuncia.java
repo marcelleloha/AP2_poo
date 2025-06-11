@@ -25,6 +25,9 @@ public class Denuncia implements Votavel {
         this.categoria = categoria;
         this.descricao = descricao;
         this.localizacao = localizacao;
+        if (localizacao != null) {
+            localizacao.setDenuncia(this);
+        }
         this.data = data;
 
         this.votosPrioridade = new HashMap<Usuario, Integer>();
@@ -40,6 +43,9 @@ public class Denuncia implements Votavel {
         this.categoria = categoria;
         this.descricao = descricao;
         this.localizacao = localizacao;
+        if (localizacao != null) {
+            localizacao.setDenuncia(this);
+        }
         this.data = data;
 
         this.votosPrioridade = new HashMap<Usuario, Integer>();

@@ -62,8 +62,6 @@ public class EnderecoFixoDAO implements BaseDAO {
                 ResultSet rst = pstm.getResultSet();
                 while (rst.next()) {
                     int idEndereco = rst.getInt("idEndereco");
-                    int idDenuncia = rst.getInt("idDenuncia");
-                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
                     String cidade = rst.getString("cidade");
                     String estado = rst.getString("estado");
                     String cep = rst.getString("cep");
@@ -72,7 +70,7 @@ public class EnderecoFixoDAO implements BaseDAO {
                     String bairro = rst.getString("bairro");
 
 
-                    return new EnderecoFixo(idEndereco, denuncia, cidade, estado, cep, rua, numero, bairro);
+                    return new EnderecoFixo(idEndereco, null, cidade, estado, cep, rua, numero, bairro);
                 }
             }
             return null;

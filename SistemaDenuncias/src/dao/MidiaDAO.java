@@ -71,6 +71,29 @@ public class MidiaDAO implements BaseDAO {
         }
     }
 
+    public Object buscarPorId(int id, Denuncia denuncia) {
+        DenunciaDAO ddao = new DenunciaDAO(connection);
+        try {
+            String sql = "SELECT idMidia, idDenuncia, url, legenda FROM midia WHERE idMidia = ?";
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setInt(1, id);
+
+                pstm.execute();
+                ResultSet rst = pstm.getResultSet();
+                while (rst.next()) {
+                    int idMidia = rst.getInt("idMidia");
+                    String url = rst.getString("url");
+                    String legenda = rst.getString("legenda");
+                    return new Midia(idMidia, denuncia, url, legenda);
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public ArrayList<Object> listarTodosLazyLoading() {
         DenunciaDAO ddao = new DenunciaDAO(connection);

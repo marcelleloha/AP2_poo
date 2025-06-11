@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class ComentarioDAO {
+public class ComentarioDAO implements BaseDAO{
     private Connection connection;
 
     public ComentarioDAO(Connection connection) {
@@ -52,11 +52,11 @@ public class ComentarioDAO {
 
     public void salvarVotos(Comentario comentario){
         try{
-            String sql = "INSERT INTO voto_comentario (idUsuario, idDenuncia) VALUES(?,?)";
+            String sql = "INSERT INTO voto_comentario (idUsuario, idComentario) VALUES(?,?)";
             for (Usuario usuario : comentario.getVotos()) {
                 try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                     pstm.setInt(1, usuario.getIdUsuario());
-                    pstm.setInt(2, comentario.getDenuncia().getIdDenuncia());
+                    pstm.setInt(2, comentario.getIdComentario());
                     pstm.execute();
                 }
             }
@@ -102,7 +102,7 @@ public class ComentarioDAO {
                             comentario = new Comentario(id, autor, denuncia, conteudo, data);
                         }
 
-                        int idUsuario = rst.getInt("idUsuario");
+                        int idUsuario = rst.getInt("idVotante");
                         if(idUsuario != 0){
                             Usuario usuario = (Usuario) udao.buscarPorId(idUsuario);
                             comentario.receberVoto(usuario, 1);
@@ -148,6 +148,57 @@ public class ComentarioDAO {
         }
     }
 
+    public ArrayList<Object> listarTodosEagerLoading() {
+        UsuarioDAO udao = new UsuarioDAO(connection);
+        DenunciaDAO ddao = new DenunciaDAO(connection);
+
+        ArrayList<Object> comentarios = new ArrayList<>();
+
+        Comentario ultimo = null;
+
+        try {
+
+            String sql ="""
+                        SELECT c.idComentario, c.idUsuario, c.idDenuncia, c.texto, c.dtComentario, v.idUsuario as idVotante
+                        FROM comentario as c
+                        LEFT JOIN voto_comentario as v ON v.idComentario = c.idComentario
+                        """;
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.execute();
+                try(ResultSet rst = pstm.getResultSet()){
+                    while (rst.next()){
+                        if (ultimo == null || ultimo.getIdComentario() != rst.getInt(1)){
+                            int idComentario = rst.getInt("idComentario");
+                            String conteudo = rst.getString("texto");
+                            LocalDateTime data = rst.getObject("dtComentario", LocalDateTime.class);
+                            int idAutor = rst.getInt("idUsuario");
+                            int idDenuncia = rst.getInt("idDenuncia");
+                            Usuario autor = (Usuario) udao.buscarPorId(idAutor);
+                            Denuncia denuncia = ddao.buscarPorId(idDenuncia);
+
+                            Comentario comentario = new Comentario(idComentario, autor, denuncia, conteudo, data);
+                            comentarios.add(comentario);
+                            ultimo = comentario;
+
+                        }
+
+                        int idUsuario = rst.getInt("idVotante");
+                        if(idUsuario != 0){
+                            Usuario usuario = (Usuario) udao.buscarPorId(idUsuario);
+                            ultimo.receberVoto(usuario, 1);
+                        }
+
+                    }
+
+                    return comentarios;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void atualizar(Object objeto) {
         if (!(objeto instanceof Comentario)) {
             throw new IllegalArgumentException("Objeto deve ser do tipo Comentario.");
@@ -155,8 +206,7 @@ public class ComentarioDAO {
 
         Comentario comentario = (Comentario) objeto;
 
-        // Atualizar os dados principais da denúncia
-        String sql = "UPDATE comentario SET idUsuario = ? and idDenuncia = ? and texto = ? and dtComentario = ?";
+        String sql = "UPDATE comentario SET idUsuario = ?, idDenuncia = ?, texto = ?, dtComentario = ?";
 
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
 

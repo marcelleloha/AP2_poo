@@ -5,8 +5,8 @@ public class PontoDeReferencia extends Localizacao {
     private String nomeponto;
     private String descricaoponto;
 
-    public PontoDeReferencia(Denuncia denuncia, String cidade, String estado, String nomeponto, String descricaoponto) {
-        super(denuncia, cidade, estado);
+    public PontoDeReferencia(String cidade, String estado, String nomeponto, String descricaoponto) {
+        super(cidade, estado);
         this.nomeponto = nomeponto;
         this.descricaoponto = descricaoponto;
     }
@@ -17,6 +17,7 @@ public class PontoDeReferencia extends Localizacao {
         this.idPonto = idPonto;
         this.nomeponto = nomeponto;
         this.descricaoponto = descricaoponto;
+        this.denuncia = denuncia;
     }
 
     public String getNome() {

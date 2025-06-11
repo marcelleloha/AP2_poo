@@ -161,8 +161,10 @@ public class DenunciaDAO implements BaseDAO{
 
                             } else if (rst.getInt("idPonto") != 0) {
                                 int idPonto = rst.getInt("idPonto");
+                                System.out.println("Entrou no if do ponto de referência: " + idPonto);
                                 PontoDeReferenciaDAO pdao = new PontoDeReferenciaDAO(connection);
                                 localizacao = (PontoDeReferencia) pdao.buscarPorId(idPonto);
+                                System.out.println(localizacao);
 
                             } else if (rst.getInt("idCoordenada") != 0) {
                                 int idCoordenada = rst.getInt("idCoordenada");
@@ -193,7 +195,7 @@ public class DenunciaDAO implements BaseDAO{
                         int idMidia = rst.getInt("idMidia");
                         if (idMidia != 0) {
                             MidiaDAO mdao = new MidiaDAO(connection);
-                            Midia midia = (Midia) mdao.buscarPorId(idMidia);
+                            Midia midia = (Midia) mdao.buscarPorId(idMidia, denuncia);
                             denuncia.addMidia(midia);
                         }
                     }
@@ -312,7 +314,7 @@ public class DenunciaDAO implements BaseDAO{
                         // Adiciona mídia
                         int idMidia = rst.getInt("idMidia");
                         if (idMidia != 0) {
-                            Midia midia = (Midia) mdao.buscarPorId(idMidia);
+                            Midia midia = (Midia) mdao.buscarPorId(idMidia, ultima);
                             ultima.addMidia(midia);
                         }
                     }

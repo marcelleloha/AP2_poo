@@ -60,13 +60,11 @@ public class PontoDeReferenciaDAO implements BaseDAO {
                 ResultSet rst = pstm.getResultSet();
                 while (rst.next()) {
                     int idPonto = rst.getInt("idPonto");
-                    int idDenuncia = rst.getInt("idDenuncia");
-                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
                     String cidade = rst.getString("cidade");
                     String estado = rst.getString("estado");
                     String nomePonto = rst.getString("nomePonto");
                     String descricaoPonto = rst.getString("descricaoPonto");
-                    return new PontoDeReferencia(idPonto, denuncia, cidade, estado, nomePonto, descricaoPonto);
+                    return new PontoDeReferencia(idPonto, null, cidade, estado, nomePonto, descricaoPonto);
                 }
             }
             return null;

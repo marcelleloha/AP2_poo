@@ -59,13 +59,11 @@ public class CoordenadasDAO implements BaseDAO {
                 ResultSet rst = pstm.getResultSet();
                 while (rst.next()) {
                     int idCoordenada = rst.getInt("idCoordenada");
-                    int idDenuncia = rst.getInt("idDenuncia");
-                    Denuncia denuncia = (Denuncia) ddao.buscarPorId(idDenuncia);
                     String cidade = rst.getString("cidade");
                     String estado = rst.getString("estado");
                     double latitude = rst.getDouble("latitude");
                     double longitude = rst.getDouble("longitude");
-                    return new Coordenadas(idCoordenada, denuncia, cidade, estado, latitude, longitude);
+                    return new Coordenadas(idCoordenada, null, cidade, estado, latitude, longitude);
                 }
             }
             return null;
