@@ -74,6 +74,31 @@ public class UsuarioDAO implements BaseDAO {
         }
     }
 
+    public Object buscarPorNomeEmail(String nomeUsuario, String emailUsuario) {
+
+        try {
+            String sql = "SELECT idUsuario, nome, email, senha FROM usuario WHERE nome = ? and email = ?";
+
+            try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+                pstm.setString(1, nomeUsuario);
+                pstm.setString(2, emailUsuario);
+
+                pstm.execute();
+                ResultSet rst = pstm.getResultSet();
+                while (rst.next()) {
+                    int identificador = rst.getInt("idUsuario");
+                    String nome = rst.getString("nome");
+                    String email = rst.getString("email");
+                    String senha = rst.getString("senha");
+                    return new Usuario(identificador, nome, email, senha);
+                }
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean existeUsuarioIgual(Usuario usuario) {
         String sql = "SELECT 1 FROM usuario WHERE nome = ? AND email = ? LIMIT 1";
         try (PreparedStatement pstm = connection.prepareStatement(sql)) {
