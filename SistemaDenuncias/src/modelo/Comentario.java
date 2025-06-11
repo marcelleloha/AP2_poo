@@ -72,6 +72,7 @@ public class Comentario implements Votavel {
         this.conteudo = novoConteudo;
     }
 
+    @Override
     public int numeroVotos () {
         return votos.size();
     }

@@ -166,6 +166,11 @@ public class Denuncia implements Votavel {
     }
 
     @Override
+    public int numeroVotos() {
+        return votosPrioridade.size();
+    }
+
+    @Override
     public String toString() {
         return "ID da denúncia: "+ idDenuncia + ", Denúncia: " + titulo + ", criador: " + criador + ", data: " + data;
     }
