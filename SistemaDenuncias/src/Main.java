@@ -101,5 +101,8 @@ public class Main {
             System.out.println("Data: " + comentario.getData());
             System.out.println();
         }
+
+        ddao.excluir(3);
+        System.out.println("Denúncia 3 excluída com sucesso!");
     }
 }
